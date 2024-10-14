@@ -16,4 +16,6 @@ public class UserService {
     public void validateUserPoints(Long userId, int totalPrice) {
         getUserInfo(userId).pointValid(totalPrice);
     }
+
+
 }
