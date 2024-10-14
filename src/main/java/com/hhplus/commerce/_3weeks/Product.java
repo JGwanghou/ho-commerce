@@ -4,29 +4,31 @@ import lombok.Getter;
 
 @Getter
 public class Product {
-    private int id;
+    private Long id;
     private String name;
-    private int price;
-    private int quantity;
+    private Long price;
+    private Long stock;
 
-    public Product(int id, int quantity) {
-        this.id = id;
-        this.quantity = quantity;
-    }
 
-    public Product(int id, String name, int price, int quantity) {
+    public Product(Long id, String name, Long price, Long stock) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
+        this.stock = stock;
+    }
+
+    public Product(String name, Long price) {
+        this.name = name;
+        this.price = price;
     }
 
     public Product stockDecrease(int id, int buyQuantity) {
-        if(this.quantity - buyQuantity < 0) {
+        if(this.stock - buyQuantity < 0) {
             throw new RuntimeException("재고가 부족한 상품이 있습니다 id : " + id);
         }
 
-        this.quantity -= buyQuantity;
+        this.stock -= buyQuantity;
         return this;
     }
+
 }
