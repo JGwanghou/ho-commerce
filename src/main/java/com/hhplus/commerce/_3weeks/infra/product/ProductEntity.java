@@ -1,4 +1,4 @@
-package com.hhplus.commerce._3weeks.infra;
+package com.hhplus.commerce._3weeks.infra.product;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
