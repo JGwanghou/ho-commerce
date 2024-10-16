@@ -1,5 +1,6 @@
 package com.hhplus.commerce._3weeks.infra.cart;
 
+import com.hhplus.commerce._3weeks.domain.cart.Cart;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,4 +19,14 @@ public class CartEntity  {
     @Column(name = "userId")
     private Long userId;
 
+    public Long getId() {
+        return id;
+    }
+
+    public CartEntity(Long userId) {
+        this.userId = userId;
+    }
+    public Cart toCart() {
+        return new Cart(getId(), userId);
+    }
 }

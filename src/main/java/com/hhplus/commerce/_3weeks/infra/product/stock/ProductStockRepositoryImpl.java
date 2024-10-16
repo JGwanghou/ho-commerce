@@ -9,9 +9,5 @@ import org.springframework.stereotype.Repository;
 public class ProductStockRepositoryImpl implements ProductStockRepository {
     private final ProductStockJpaRepository productStockJpaRepository;
 
-    @Override
-    public int findProductStockByProductId(Long productId) {
-        return productStockJpaRepository.findById(productId).get().getStock();
-    }
 
 }
