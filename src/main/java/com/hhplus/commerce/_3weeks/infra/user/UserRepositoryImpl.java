@@ -19,4 +19,9 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지않습니다."));
     }
+
+    @Override
+    public UserEntity payment(UserEntity userEntity) {
+        return userJpaRepository.save(userEntity);
+    }
 }

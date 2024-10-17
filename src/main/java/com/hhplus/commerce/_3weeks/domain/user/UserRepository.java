@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UserRepository {
     UserEntity getUserInfo(Long id);
+    UserEntity payment(UserEntity userEntity);
 }

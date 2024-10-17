@@ -18,7 +18,7 @@ public class CartUseCase {
     private final ProductService productService;
 
     public void addCart(Long userId, List<CartItem> cartItems) {
-        User userInfo = userService.getUserInfo(userId);
+//        User userInfo = userService.getUserInfo(userId);
 
 //        cartService.카트생성
 //
