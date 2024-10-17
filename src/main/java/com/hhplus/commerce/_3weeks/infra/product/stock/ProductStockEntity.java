@@ -1,5 +1,6 @@
 package com.hhplus.commerce._3weeks.infra.product.stock;
 
+import com.hhplus.commerce._3weeks.domain.product.Product;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,4 +19,9 @@ public class ProductStockEntity {
 
     @Column(name = "stock", nullable = false)
     private int stock;
+
+    public ProductStockEntity decreaseStock(int buy_count) {
+        this.stock -= buy_count;
+        return this;
+    }
 }

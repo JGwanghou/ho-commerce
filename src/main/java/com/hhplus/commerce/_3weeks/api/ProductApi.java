@@ -2,6 +2,7 @@ package com.hhplus.commerce._3weeks.api;
 
 import com.hhplus.commerce._3weeks.domain.product.ProductService;
 import com.hhplus.commerce._3weeks.domain.product.Product;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,19 +19,17 @@ public class ProductApi {
 
     private final ProductService productService;
 
-    /**
-     *  TODO : 상품 목록 API
-     */
+
+
+    @Tag(name = "상품 전체조회 API", description = "상품 전체조회 API 입니다.")
     @GetMapping
     public ResponseEntity<List<Product>> productAll(){
         List<Product> products = productService.readProductAll();
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(products);//
     }
 
 
-    /**
-     *  TODO : 상품 조회 API
-     */
+    @Tag(name = "상품 상세조회 API", description = "상품 상세조회 API 입니다.")
     @GetMapping("{productId}")
     public ResponseEntity<Product> productInfo(@PathVariable Long productId){
         Product product = productService.readProductDetail(productId);

@@ -18,6 +18,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public List<Product> findByIdsWithStock(List<Long> productIds) {
+        return List.of();
+    }
+
+    @Override
     public Product findProductById(Long id) {
         return productJpaRepository.findByIdWithStock(id);
     }

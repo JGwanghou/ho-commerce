@@ -15,6 +15,11 @@ public class ProductReader {
         return productRepository.findProductAll();
     }
 
+    public List<Product> readProductByIds(List<Long> productIds) {
+        return productRepository.findByIdsWithStock(productIds);
+    }
+
+
     public Product readProductDetail(Long id) {
         Product product = productRepository.findProductById(id);
         if (product == null) {

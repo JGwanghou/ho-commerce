@@ -21,6 +21,14 @@ public interface ProductJpaRepository extends JpaRepository<ProductEntity, Long>
             "FROM ProductEntity p " +
             "LEFT JOIN ProductStockEntity ps " +
             "ON p.id = ps.productId " +
+            "WHERE p.id IN :productIds")
+    List<Product> findByIdsWithStock(List<Long> productIds);
+
+    @Query("SELECT " +
+            "new com.hhplus.commerce._3weeks.domain.product.Product(p.id, p.productName, p.price, ps.stock) " +
+            "FROM ProductEntity p " +
+            "LEFT JOIN ProductStockEntity ps " +
+            "ON p.id = ps.productId " +
             "WHERE p.id = :id")
     Product findByIdWithStock(@Param("id") Long id);
 }
