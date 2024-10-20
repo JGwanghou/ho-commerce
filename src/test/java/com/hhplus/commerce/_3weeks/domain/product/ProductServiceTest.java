@@ -1,5 +1,8 @@
 package com.hhplus.commerce._3weeks.domain.product;
 
+import com.hhplus.commerce._3weeks.api.dto.request.OrderProductsRequest;
+import com.hhplus.commerce._3weeks.infra.product.ProductUpdater;
+import com.hhplus.commerce._3weeks.infra.product.stock.ProductStockEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +20,9 @@ class ProductServiceTest {
     @Mock
     private ProductReader productReader;
 
+    @Mock
+    private ProductUpdater productUpdater;
+
     @InjectMocks
     private ProductService productService;
 
@@ -32,6 +38,45 @@ class ProductServiceTest {
         assertEquals(2, products.size());
         assertEquals("초코파이", products.get(0).getName());
         assertEquals("새송이버섯", products.get(1).getName());
+    }
+
+    @Test
+    void 주문한_상품목록() {
+        Product prod1 = new Product(1L, "초코파이", 2000, 10);
+        Product prod2 = new Product(2L, "새송이버섯", 3000, 25);
+
+        List<Long> productIds = List.of(prod1.getId(), prod2.getId());
+
+        when(productReader.readProductByIds(productIds)).thenReturn(List.of(prod1,prod2));
+
+        List<Product> products = productService.readProductByIds(productIds);
+
+        assertEquals(2, products.size());
+        assertEquals("초코파이", products.get(0).getName());
+        assertEquals("새송이버섯", products.get(1).getName());
+    }
+
+    @Test
+    void 주문한_수량_재고차감() {
+        Product prod1 = new Product(1L, "초코파이", 2000, 10);
+        Product prod2 = new Product(2L, "새송이버섯", 3000, 25);
+
+        List<OrderProductsRequest> products = List.of(
+                new OrderProductsRequest(1L, 3),
+                new OrderProductsRequest(2L, 2)
+        );
+
+        List<ProductStockEntity> stockList = List.of(
+                new ProductStockEntity(1L, 7),
+                new ProductStockEntity(2L, 23)
+        );
+
+        when(productUpdater.updateStock(products)).thenReturn(stockList);
+
+        List<ProductStockEntity> stockEntities = productService.decreaseStock(products);
+
+        assertEquals(7, stockEntities.get(0).getStock());
+        assertEquals(23, stockEntities.get(1).getStock());
     }
 
     @Test
