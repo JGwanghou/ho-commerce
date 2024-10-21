@@ -20,8 +20,15 @@ import static org.mockito.BDDMockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
+//    @Mock
+//    private UserRepository userRepository;
+
     @Mock
-    private UserRepository userRepository;
+    private UserReader userReader;
+
+    @Mock
+    private UserUpdater userUpdater;
+
 
     @InjectMocks
     private UserService userService;
@@ -39,7 +46,7 @@ class UserServiceTest {
 
     @Test
     void 유저_정보_조회() {
-        when(userRepository.getUserInfo(1L)).thenReturn(mockUser);
+        when(userReader.getUserInfo(1L)).thenReturn(mockUser);
 
         UserEntity userInfo = userService.getUserInfo(mockUser.getId());
 
@@ -50,13 +57,13 @@ class UserServiceTest {
 
     @Test
     void 유저_포인트_충전() {
-        UserEntity before = new UserEntity(1L, "김하나", 0L);
+        UserEntity afterUser = new UserEntity(1L, "조광호", 15000L);
+        when(userReader.getUserInfo(1L)).thenReturn(mockUser);
+        when(userUpdater.charge(mockUser, 5000L)).thenReturn(afterUser);
 
-        when(userRepository.charge()).thenReturn(유저정보(엔티티));
+        UserEntity userEntity = userService.chargePoint(mockUser.getId(), 5000L);
 
-        userService.charge(userId)
-
-
+        assertEquals(15000, userEntity.getPoint());
     }
 
     @Test

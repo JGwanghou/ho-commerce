@@ -12,10 +12,14 @@ public class UserService {
     private final UserReader userReader;
     private final UserUpdater userUpdater;
 
-    private final UserRepository userRepository;
-
     public UserEntity getUserInfo(Long id) {
         return userReader.getUserInfo(id);
+    }
+
+    public UserEntity chargePoint(Long userId, Long point) {
+        UserEntity userInfo = userReader.getUserInfo(userId);
+
+        return userUpdater.charge(userInfo, point);
     }
 
     public UserEntity payment(UserEntity user, OrderRequest request) {

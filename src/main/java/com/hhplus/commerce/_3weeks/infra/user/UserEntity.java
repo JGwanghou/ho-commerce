@@ -30,6 +30,14 @@ public class UserEntity {
         this.point = point;
     }
 
+    public void chargePoint(Long paymentPrice) {
+        if(paymentPrice <= 0){
+            throw new IllegalArgumentException("충전 금액을 다시 확인해주세요. [충전요청 : " + paymentPrice + "]");
+        }
+
+        this.point += paymentPrice;
+    }
+
     public void validPoint(Long paymentPrice) {
         if (this.point < paymentPrice) {
             throw new InsufficientBalanceException("잔고가 부족합니다.");

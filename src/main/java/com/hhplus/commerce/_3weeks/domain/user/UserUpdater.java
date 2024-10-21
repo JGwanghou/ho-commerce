@@ -11,6 +11,12 @@ public class UserUpdater {
     private final UserRepository userRepository;
 
 
+    public UserEntity charge(UserEntity user, Long point) {
+        user.chargePoint(point);
+
+        return userRepository.charge(user);
+    }
+
     public UserEntity payment(UserEntity user, OrderRequest request) {
         user.validPoint(request.getPaymentPrice());
 
