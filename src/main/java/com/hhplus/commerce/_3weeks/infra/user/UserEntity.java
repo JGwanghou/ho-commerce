@@ -32,7 +32,6 @@ public class UserEntity {
 
     public void validPoint(Long paymentPrice) {
         if (this.point < paymentPrice) {
-            System.out.println("this.point : " + this.point);
             throw new InsufficientBalanceException("잔고가 부족합니다.");
         }
 

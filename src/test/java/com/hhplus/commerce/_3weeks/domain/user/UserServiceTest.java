@@ -49,6 +49,17 @@ class UserServiceTest {
     }
 
     @Test
+    void 유저_포인트_충전() {
+        UserEntity before = new UserEntity(1L, "김하나", 0L);
+
+        when(userRepository.charge()).thenReturn(유저정보(엔티티));
+
+        userService.charge(userId)
+
+
+    }
+
+    @Test
     void 주문시_유저포인트_소모() {
         Product testProduct1 = new Product(1L, "스크류바", 2000, 30);
         Product testProduct2 = new Product(2L, "우유", 4000, 20);
