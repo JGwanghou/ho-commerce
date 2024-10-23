@@ -68,6 +68,7 @@ class UserServiceTest {
     void 주문시_유저포인트_소모() {
         Product testProduct1 = new Product(1L, "스크류바", 2000, 30);
         Product testProduct2 = new Product(2L, "우유", 4000, 20);
+        List<Product> products = List.of(testProduct1, testProduct2);
 
         List<OrderProductsRequest> orderProducts = List.of(
                 new OrderProductsRequest(testProduct1.getId(), 2),
@@ -76,10 +77,12 @@ class UserServiceTest {
 
         OrderRequest orderRequest = new OrderRequest(mockUser.getId(), orderProducts, 8000L);
 
-        UserEntity usePointUser = new UserEntity(1L, "조광호", 2000L);
-        when(userUpdater.payment(mockUser, orderRequest.getPaymentPrice())).thenReturn(usePointUser);
+        UserEntity paymentAfterUser = new UserEntity(1L, "조광호", 2000L);
 
-        UserEntity result = userService.payment(mockUser.getId(), orderRequest.getPaymentPrice());
+        when(userUpdater.payment(mockUser, products, orderRequest.getPaymentPrice())).thenReturn(paymentAfterUser);
+        when(userReader.getUserInfo(1L)).thenReturn(mockUser);
+
+        UserEntity result = userService.payment(mockUser.getId(), products, orderRequest.getPaymentPrice());
 
         assertEquals(2000L, result.getPoint());
     }

@@ -17,10 +17,10 @@ public class OrderService {
     private final OrderItemAppender orderItemAppender;
     private final OrderProcessor orderProcessor;
 
-    public OrderEntity serviceOrder(Long userId, List<Product> products, OrderRequest request) {
+    public OrderEntity serviceOrder(Long userId, OrderRequest request) {
         OrderEntity order = orderProcessor.processOrder(userId);
 
-        List<OrderItemEntity> orderItems = orderItemAppender.create(order, products, request.getProducts());
+        List<OrderItemEntity> orderItems = orderItemAppender.create(order, request.getProducts());
 
         return order;
     }

@@ -31,11 +31,14 @@ public class OrderUseCase {
                 .collect(Collectors.toList())
         );
 
-        OrderEntity order = orderService.serviceOrder(request.getUser_id(), products, request);
+        // 1. Order테이블, OrderItem 테이블 저장
+        OrderEntity order = orderService.serviceOrder(request.getUser_id(), request);
 
+        // 2. 재고 감소
         productService.decreaseStock(request.getProducts());
 
-        userService.payment(request.getUser_id(), request.getPaymentPrice());
+        // 3. 유저 포인트 차감
+        userService.payment(request.getUser_id(), products, request.getPaymentPrice());
 
         return order.getId();
     }

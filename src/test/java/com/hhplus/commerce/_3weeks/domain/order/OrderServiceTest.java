@@ -53,9 +53,9 @@ class OrderServiceTest {
         OrderRequest orderRequest = new OrderRequest(user.getId(), orderProductsRequests, 10000L);
 
         when(orderProcessor.processOrder(30L)).thenReturn(order);
-        when(orderItemAppender.create(order, products, orderRequest.getProducts())).thenReturn(items);
+        when(orderItemAppender.create(order, orderRequest.getProducts())).thenReturn(items);
 
-        OrderEntity result = orderService.serviceOrder(user.getId(), products, orderRequest);
+        OrderEntity result = orderService.serviceOrder(user.getId(), orderRequest);
 
         assertEquals(order.getId(), result.getId());
     }

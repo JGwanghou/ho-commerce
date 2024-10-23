@@ -25,10 +25,10 @@ public class ProductUpdater {
 
         for (OrderProductsRequest orderRequest : req) {
             ProductStockEntity productStock = productStockRepository.findById(orderRequest.getProduct_id());
-            productStock.decreaseStock(orderRequest.getProduct_quantity());
+            productStock.decreaseStock(orderRequest);
 
             stockEntities.add(productStock);
-            productStockRepository.save(productStock);
+            productStockRepository.lockedStockSave(productStock);
         }
 
         return stockEntities;

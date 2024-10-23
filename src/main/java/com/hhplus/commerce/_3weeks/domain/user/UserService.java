@@ -1,12 +1,14 @@
 package com.hhplus.commerce._3weeks.domain.user;
 
 import com.hhplus.commerce._3weeks.api.dto.request.OrderRequest;
+import com.hhplus.commerce._3weeks.domain.product.Product;
 import com.hhplus.commerce._3weeks.infra.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -35,10 +37,10 @@ public class UserService {
     }
 
     @Transactional
-    public UserEntity payment(Long userId, Long point) {
+    public UserEntity payment(Long userId, List<Product> products, Long point) {
         UserEntity userInfo = userCache.computeIfAbsent(userId, userReader::getUserInfo);
 
-        UserEntity decreaseUser = userUpdater.payment(userInfo, point);
+        UserEntity decreaseUser = userUpdater.payment(userInfo, products, point);
 
         userCache.put(userId, decreaseUser);
 
