@@ -49,5 +49,9 @@ public class ProductReaderTest {
         assertEquals(2, result.getStock());
     }
 
+    @Test
+    void 인기상품_조회() {
+
+    }
 
 }

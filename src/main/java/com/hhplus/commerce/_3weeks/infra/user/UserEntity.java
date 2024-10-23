@@ -1,5 +1,6 @@
 package com.hhplus.commerce._3weeks.infra.user;
 
+import com.hhplus.commerce._3weeks.common.config.BaseEntity;
 import com.hhplus.commerce._3weeks.common.exception.InsufficientBalanceException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserEntity {
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

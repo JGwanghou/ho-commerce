@@ -22,6 +22,10 @@ public class ProductService {
         return productReader.readProductByIds(productIds);
     }
 
+    public List<Product> readProductPopulars() {
+        return productReader.readProductPopulars();
+    }
+
     public List<ProductStockEntity> decreaseStock(List<OrderProductsRequest> products) {
          return productUpdater.updateStock(products);
     }
