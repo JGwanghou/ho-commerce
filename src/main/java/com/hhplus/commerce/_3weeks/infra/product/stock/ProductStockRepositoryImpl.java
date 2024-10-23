@@ -3,8 +3,11 @@ package com.hhplus.commerce._3weeks.infra.product.stock;
 import com.hhplus.commerce._3weeks.api.dto.request.OrderProductsRequest;
 import com.hhplus.commerce._3weeks.common.exception.ProductNotFoundException;
 import com.hhplus.commerce._3weeks.domain.product.ProductStockRepository;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,11 +18,13 @@ public class ProductStockRepositoryImpl implements ProductStockRepository {
 
 
     @Override
+    @Transactional(readOnly = true)
     public ProductStockEntity findById(Long id) {
         return productStockJpaRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("상품 재고 정보가 없습니다."));
     }
 
     @Override
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public ProductStockEntity save(ProductStockEntity productStock) {
         return productStockJpaRepository.save(productStock);
     }
