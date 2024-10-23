@@ -3,26 +3,45 @@ package com.hhplus.commerce._3weeks.domain.user;
 import com.hhplus.commerce._3weeks.api.dto.request.OrderRequest;
 import com.hhplus.commerce._3weeks.infra.user.UserEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserReader userReader;
     private final UserUpdater userUpdater;
 
+    private final ConcurrentHashMap<Long, UserEntity> userCache = new ConcurrentHashMap<>();
+
     public UserEntity getUserInfo(Long id) {
         return userReader.getUserInfo(id);
     }
 
+    @Transactional
     public UserEntity chargePoint(Long userId, Long point) {
-        UserEntity userInfo = userReader.getUserInfo(userId);
+        UserEntity userInfo = userCache.computeIfAbsent(userId, userReader::getUserInfo);
 
-        return userUpdater.charge(userInfo, point);
+        UserEntity addPointUser = userUpdater.charge(userInfo, point);
+
+        userCache.put(userId, addPointUser);
+
+        return addPointUser;
     }
 
-    public UserEntity payment(UserEntity user, OrderRequest request) {
-        return userUpdater.payment(user, request);
+    @Transactional
+    public UserEntity payment(Long userId, Long point) {
+        UserEntity userInfo = userCache.computeIfAbsent(userId, userReader::getUserInfo);
+
+        UserEntity decreaseUser = userUpdater.payment(userInfo, point);
+
+        userCache.put(userId, decreaseUser);
+
+        return decreaseUser;
     }
 }

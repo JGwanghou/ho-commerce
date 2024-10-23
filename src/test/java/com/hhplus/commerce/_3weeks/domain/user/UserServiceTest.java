@@ -20,9 +20,6 @@ import static org.mockito.BDDMockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-//    @Mock
-//    private UserRepository userRepository;
-
     @Mock
     private UserReader userReader;
 
@@ -58,6 +55,7 @@ class UserServiceTest {
     @Test
     void 유저_포인트_충전() {
         UserEntity afterUser = new UserEntity(1L, "조광호", 15000L);
+
         when(userReader.getUserInfo(1L)).thenReturn(mockUser);
         when(userUpdater.charge(mockUser, 5000L)).thenReturn(afterUser);
 
@@ -78,8 +76,11 @@ class UserServiceTest {
 
         OrderRequest orderRequest = new OrderRequest(mockUser.getId(), orderProducts, 8000L);
 
-        userService.payment(mockUser, orderRequest);
+        UserEntity usePointUser = new UserEntity(1L, "조광호", 2000L);
+        when(userUpdater.payment(mockUser, orderRequest.getPaymentPrice())).thenReturn(usePointUser);
 
-        assertEquals(2000L, mockUser.getPoint());
+        UserEntity result = userService.payment(mockUser.getId(), orderRequest.getPaymentPrice());
+
+        assertEquals(2000L, result.getPoint());
     }
 }

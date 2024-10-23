@@ -24,7 +24,6 @@ public class OrderUseCase {
     private final OrderService orderService;
 
     public Long order(OrderRequest request) {
-        UserEntity userInfo = userService.getUserInfo(request.getUser_id());
 
         List<Product> products = productService.readProductByIds(
                 request.getProducts().stream()
@@ -36,7 +35,7 @@ public class OrderUseCase {
 
         productService.decreaseStock(request.getProducts());
 
-        userService.payment(userInfo, request);
+        userService.payment(request.getUser_id(), request.getPaymentPrice());
 
         return order.getId();
     }
