@@ -1,6 +1,7 @@
 package com.hhplus.commerce._3weeks.domain.product;
 
 import com.hhplus.commerce._3weeks.api.dto.request.OrderProductsRequest;
+import com.hhplus.commerce._3weeks.common.exception.OutOfStockException;
 import com.hhplus.commerce._3weeks.infra.product.ProductUpdater;
 import com.hhplus.commerce._3weeks.infra.product.stock.ProductStockEntity;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,13 @@ public class ProductService {
 
     public Product readProductDetail(Long productId) {
         return productReader.readProductDetail(productId);
+    }
+
+
+    public boolean readCartProductDetailStockCheck(Long productId, Long quantity) {
+        if(!(productReader.readProductDetail(productId).getStock() >= quantity) ){
+            throw new OutOfStockException(productId + "번 상품재고가 부족하여 장바구니에 담을 수 없습니다.");
+        };
+        return true;
     }
 }

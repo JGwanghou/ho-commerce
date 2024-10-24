@@ -4,7 +4,11 @@ import com.hhplus.commerce._3weeks.api.dto.request.CartItemRequest;
 import com.hhplus.commerce._3weeks.application.CartUseCase;
 import com.hhplus.commerce._3weeks.domain.product.Product;
 import com.hhplus.commerce._3weeks.domain.product.ProductService;
+import com.hhplus.commerce._3weeks.infra.cart.cartitem.CartItemEntity;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,27 +24,31 @@ public class CartApi {
     /**
      *  TODO : 장바구니 조회
      */
-//    @GetMapping
-//    public ResponseEntity<List<Product>> productAll(){
-//
-//    }
+    @GetMapping("{userId}")
+    public ResponseEntity<List<CartItemEntity>> findCart(@PathVariable Long userId){
+        List<CartItemEntity> cartProducts = cartUseCase.findCartProducts(userId);
+        return ResponseEntity.ok(cartProducts);
+    }
 
 
     /**
-     *  TODO : 장바구니 추가 (userId기준 Cart에 없다면 생성, 있다면 CartItem에 상품만 추가)
+     *  TODO : 장바구니 추가
      */
+    @Tag(name = "장바구니 추가 API", description = "장바구니 상품추가 API입니다.")
     @PostMapping
-    public void productInfo(CartItemRequest cartItemRequest){
-
-        cartUseCase.addCart(cartItemRequest.getUser_id(), cartItemRequest.getItems());
-
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<CartItemEntity> addCart(@RequestBody CartItemRequest cartItemRequest){
+        CartItemEntity cartItemEntity = cartUseCase.addCart(cartItemRequest.getUser_id(), cartItemRequest.getItem().getProductId(), cartItemRequest.getItem().getProduct_qunantity());
+        return ResponseEntity.ok(cartItemEntity);
     }
 
     /**
      *  TODO : 장바구니 삭제
      */
-//    @GetMapping("{productId}")
-//    public ResponseEntity<Product> productInfo(@PathVariable Long productId){
-//
-//    }
+    @DeleteMapping
+    @Tag(name = "장바구니 삭제 API", description = "장바구니 상품삭제 API입니다.")
+    public ResponseEntity<?> productInfo(@RequestBody List<Long> productIds){
+        cartUseCase.remove(productIds);
+        return ResponseEntity.ok().body("장바구니 전체 상품 삭제가 완료되었습니다.");
+    }
 }

@@ -10,5 +10,5 @@ import java.util.List;
 @Getter
 public class CartItemRequest {
     private Long user_id;
-    private List<CartItem> items;
+    private CartItem item;
 }

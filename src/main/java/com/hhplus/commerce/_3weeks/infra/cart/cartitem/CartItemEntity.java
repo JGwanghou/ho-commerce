@@ -3,6 +3,7 @@ package com.hhplus.commerce._3weeks.infra.cart.cartitem;
 import com.hhplus.commerce._3weeks.common.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,4 +26,10 @@ public class CartItemEntity extends BaseEntity {
     @Column(name = "quantity")
     private Long quantity;
 
+    public CartItemEntity(Long cartId, Long productId, Long quantity) {
+        this.id = null;
+        this.cartId = cartId;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
 }
