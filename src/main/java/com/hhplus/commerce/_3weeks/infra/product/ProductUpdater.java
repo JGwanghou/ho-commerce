@@ -8,6 +8,7 @@ import com.hhplus.commerce._3weeks.infra.product.stock.ProductStockEntity;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +19,16 @@ public class ProductUpdater {
     private final ProductRepository productRepository;
     private final ProductStockRepository productStockRepository;
 
+    @Transactional
     public List<ProductStockEntity> updateStock(List<OrderProductsRequest> req) {
         List<ProductStockEntity> stockEntities = new ArrayList<>();
 
         for (OrderProductsRequest orderRequest : req) {
             ProductStockEntity productStock = productStockRepository.findById(orderRequest.getProduct_id());
-            productStock.decreaseStock(orderRequest.getProduct_quantity());
+            productStock.decreaseStock(orderRequest);
 
             stockEntities.add(productStock);
-            productStockRepository.save(productStock);
+            productStockRepository.lockedStockSave(productStock);
         }
 
         return stockEntities;

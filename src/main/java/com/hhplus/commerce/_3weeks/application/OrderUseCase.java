@@ -24,7 +24,6 @@ public class OrderUseCase {
     private final OrderService orderService;
 
     public Long order(OrderRequest request) {
-        UserEntity userInfo = userService.getUserInfo(request.getUser_id());
 
         List<Product> products = productService.readProductByIds(
                 request.getProducts().stream()
@@ -32,11 +31,14 @@ public class OrderUseCase {
                 .collect(Collectors.toList())
         );
 
-        OrderEntity order = orderService.serviceOrder(request.getUser_id(), products, request);
+        // 1. Order테이블, OrderItem 테이블 저장
+        OrderEntity order = orderService.serviceOrder(request.getUser_id(), request);
 
+        // 2. 재고 감소
         productService.decreaseStock(request.getProducts());
 
-        userService.payment(userInfo, request);
+        // 3. 유저 포인트 차감
+        userService.payment(request.getUser_id(), products, request.getPaymentPrice());
 
         return order.getId();
     }

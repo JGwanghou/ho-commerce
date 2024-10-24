@@ -1,5 +1,6 @@
 package com.hhplus.commerce._3weeks.infra.order.orderItem;
 
+import com.hhplus.commerce._3weeks.common.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,7 +8,7 @@ import lombok.*;
 @Table(name = "orderItem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class OrderItemEntity {
+public class OrderItemEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

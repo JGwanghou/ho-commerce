@@ -93,4 +93,25 @@ class ProductServiceTest {
         assertEquals(2000, result.getPrice());
         assertEquals(10, result.getStock());
     }
+
+    @Test
+    void 인기상품_조회() {
+        int[] sale_count = new int[]{10, 30};
+
+        List<Product> products = List.of(
+                new Product("토마토", sale_count[0]),
+                new Product("양배추", sale_count[1])
+        );
+
+        when(productReader.readProductPopulars()).thenReturn(products);
+
+        List<Product> populars = productService.readProductPopulars();
+
+        assertEquals(2, populars.size());
+        assertEquals(populars.get(0).getName(), products.get(0).getName());
+        assertEquals(populars.get(0).getSale_count(), products.get(0).getSale_count());
+
+        assertEquals(populars.get(1).getName(), products.get(1).getName());
+        assertEquals(populars.get(1).getSale_count(), products.get(1).getSale_count());
+    }
 }

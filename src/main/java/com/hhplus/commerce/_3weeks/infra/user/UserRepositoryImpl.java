@@ -24,4 +24,9 @@ public class UserRepositoryImpl implements UserRepository {
     public UserEntity payment(UserEntity userEntity) {
         return userJpaRepository.save(userEntity);
     }
+
+    @Override
+    public UserEntity charge(UserEntity userEntity) {
+        return userJpaRepository.save(userEntity);
+    }
 }

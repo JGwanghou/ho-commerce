@@ -6,6 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class CartItem {
-    private Long product_id;
+    private Long productId;
     private Long product_qunantity;
 }

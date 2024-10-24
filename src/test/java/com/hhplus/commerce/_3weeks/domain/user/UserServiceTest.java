@@ -21,7 +21,11 @@ import static org.mockito.BDDMockito.*;
 class UserServiceTest {
 
     @Mock
-    private UserRepository userRepository;
+    private UserReader userReader;
+
+    @Mock
+    private UserUpdater userUpdater;
+
 
     @InjectMocks
     private UserService userService;
@@ -39,7 +43,7 @@ class UserServiceTest {
 
     @Test
     void 유저_정보_조회() {
-        when(userRepository.getUserInfo(1L)).thenReturn(mockUser);
+        when(userReader.getUserInfo(1L)).thenReturn(mockUser);
 
         UserEntity userInfo = userService.getUserInfo(mockUser.getId());
 
@@ -49,9 +53,22 @@ class UserServiceTest {
     }
 
     @Test
+    void 유저_포인트_충전() {
+        UserEntity afterUser = new UserEntity(1L, "조광호", 15000L);
+
+        when(userReader.getUserInfo(1L)).thenReturn(mockUser);
+        when(userUpdater.charge(mockUser, 5000L)).thenReturn(afterUser);
+
+        UserEntity userEntity = userService.chargePoint(mockUser.getId(), 5000L);
+
+        assertEquals(15000, userEntity.getPoint());
+    }
+
+    @Test
     void 주문시_유저포인트_소모() {
         Product testProduct1 = new Product(1L, "스크류바", 2000, 30);
         Product testProduct2 = new Product(2L, "우유", 4000, 20);
+        List<Product> products = List.of(testProduct1, testProduct2);
 
         List<OrderProductsRequest> orderProducts = List.of(
                 new OrderProductsRequest(testProduct1.getId(), 2),
@@ -60,8 +77,13 @@ class UserServiceTest {
 
         OrderRequest orderRequest = new OrderRequest(mockUser.getId(), orderProducts, 8000L);
 
-        userService.payment(mockUser, orderRequest);
+        UserEntity paymentAfterUser = new UserEntity(1L, "조광호", 2000L);
 
-        assertEquals(2000L, mockUser.getPoint());
+        when(userUpdater.payment(mockUser, products, orderRequest.getPaymentPrice())).thenReturn(paymentAfterUser);
+        when(userReader.getUserInfo(1L)).thenReturn(mockUser);
+
+        UserEntity result = userService.payment(mockUser.getId(), products, orderRequest.getPaymentPrice());
+
+        assertEquals(2000L, result.getPoint());
     }
 }

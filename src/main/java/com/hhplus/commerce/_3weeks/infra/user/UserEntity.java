@@ -1,5 +1,6 @@
 package com.hhplus.commerce._3weeks.infra.user;
 
+import com.hhplus.commerce._3weeks.common.config.BaseEntity;
 import com.hhplus.commerce._3weeks.common.exception.InsufficientBalanceException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserEntity {
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +31,16 @@ public class UserEntity {
         this.point = point;
     }
 
+    public void chargePoint(Long paymentPrice) {
+        if(paymentPrice <= 0){
+            throw new IllegalArgumentException("충전 금액을 다시 확인해주세요. [충전요청 : " + paymentPrice + "]");
+        }
+
+        this.point += paymentPrice;
+    }
+
     public void validPoint(Long paymentPrice) {
         if (this.point < paymentPrice) {
-            System.out.println("this.point : " + this.point);
             throw new InsufficientBalanceException("잔고가 부족합니다.");
         }
 

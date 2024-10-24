@@ -2,6 +2,8 @@ package com.hhplus.commerce._3weeks.infra.cart;
 
 import com.hhplus.commerce._3weeks.domain.cart.Cart;
 import com.hhplus.commerce._3weeks.domain.cart.CartRepository;
+import com.hhplus.commerce._3weeks.domain.cart.cartItem.CartItem;
+import com.hhplus.commerce._3weeks.infra.cart.cartitem.CartItemEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +16,11 @@ public class CartRepositoryImpl implements CartRepository {
     private final CartJpaRepository cartJpaRepository;
 
     @Override
-    public boolean findByUserId(Long userId) {
-        return cartJpaRepository.findByUserId(userId).isEmpty();
+    public CartEntity readIsNullCreate(Long userId) {
+        return cartJpaRepository.findByUserId(userId)
+                .orElseGet(
+                        () -> cartJpaRepository.save(new CartEntity(userId))
+                );
     }
+
 }
