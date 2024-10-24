@@ -20,7 +20,7 @@ public class ProductStockRepositoryImpl implements ProductStockRepository {
     @Override
     @Transactional(readOnly = true)
     public ProductStockEntity findById(Long id) {
-        return productStockJpaRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("상품 재고 정보가 없습니다."));
+        return productStockJpaRepository.findById(id).orElseThrow(ProductNotFoundException::new);
     }
 
     @Override

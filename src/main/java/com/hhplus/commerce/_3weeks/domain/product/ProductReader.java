@@ -35,7 +35,7 @@ public class ProductReader {
     public Product readProductDetail(Long id) {
         Product product = productRepository.findProductById(id);
         if (product == null) {
-            throw new ProductNotFoundException("해당 상품은 존재하지 않습니다.");
+            throw new ProductNotFoundException();
         }
 
         return productRepository.findProductById(id);

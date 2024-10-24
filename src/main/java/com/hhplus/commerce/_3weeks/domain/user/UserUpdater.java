@@ -33,7 +33,7 @@ public class UserUpdater {
                 .mapToInt(Product::getPrice)
                 .sum();
 
-        if(orderPrice != point) throw new PriceMismatchException("결제 금액이 상이합니다.");
+        if(orderPrice != point) throw new PriceMismatchException();
     }
 }
 

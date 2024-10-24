@@ -38,7 +38,7 @@ public class ProductService {
 
     public boolean readCartProductDetailStockCheck(Long productId, Long quantity) {
         if(!(productReader.readProductDetail(productId).getStock() >= quantity) ){
-            throw new OutOfStockException(productId + "번 상품재고가 부족하여 장바구니에 담을 수 없습니다.");
+            throw new OutOfStockException();
         };
         return true;
     }

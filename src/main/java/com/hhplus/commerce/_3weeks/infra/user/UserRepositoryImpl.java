@@ -17,7 +17,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserEntity getUserInfo(Long id) {
         return userJpaRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지않습니다."));
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override

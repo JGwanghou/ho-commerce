@@ -25,7 +25,7 @@ public class ProductStockEntity extends BaseEntity {
 
     public ProductStockEntity decreaseStock(OrderProductsRequest request) {
         if (this.stock < request.getProduct_quantity()) {
-            throw new OutOfStockException(request.getProduct_id() + "번 상품의 재고가 부족합니다.");
+            throw new OutOfStockException();
         }
 
         this.stock -= request.getProduct_quantity();

@@ -41,7 +41,7 @@ public class UserEntity extends BaseEntity {
 
     public void validPoint(Long paymentPrice) {
         if (this.point < paymentPrice) {
-            throw new InsufficientBalanceException("잔고가 부족합니다.");
+            throw new InsufficientBalanceException();
         }
 
         this.point -= paymentPrice;
