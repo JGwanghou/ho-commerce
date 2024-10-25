@@ -79,10 +79,10 @@ class UserServiceTest {
 
         UserEntity paymentAfterUser = new UserEntity(1L, "조광호", 2000L);
 
-        when(userUpdater.payment(mockUser, products, orderRequest.getPaymentPrice())).thenReturn(paymentAfterUser);
+        when(userUpdater.payment(mockUser, orderRequest.getPaymentPrice())).thenReturn(paymentAfterUser);
         when(userReader.getUserInfo(1L)).thenReturn(mockUser);
 
-        UserEntity result = userService.payment(mockUser.getId(), products, orderRequest.getPaymentPrice());
+        UserEntity result = userService.payment(mockUser.getId(), orderRequest.getPaymentPrice());
 
         assertEquals(2000L, result.getPoint());
     }

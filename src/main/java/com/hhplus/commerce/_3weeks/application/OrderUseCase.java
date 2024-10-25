@@ -25,11 +25,7 @@ public class OrderUseCase {
 
     public Long order(OrderRequest request) {
 
-        List<Product> products = productService.readProductByIds(
-                request.getProducts().stream()
-                .map(OrderProductsRequest::getProduct_id)
-                .collect(Collectors.toList())
-        );
+        request.setPaymentPrice((long) getProductsPrice(request));
 
         // 1. Order테이블, OrderItem 테이블 저장
         OrderEntity order = orderService.serviceOrder(request.getUser_id(), request);
@@ -38,8 +34,23 @@ public class OrderUseCase {
         productService.decreaseStock(request.getProducts());
 
         // 3. 유저 포인트 차감
-        userService.payment(request.getUser_id(), products, request.getPaymentPrice());
+        userService.payment(request.getUser_id(), request.getPaymentPrice());
 
         return order.getId();
     }
+
+    private Integer getProductsPrice(OrderRequest request) {
+        List<Product> products = productService.readProductByIds(
+                request.getProducts().stream()
+                .map(OrderProductsRequest::getProduct_id)
+                .collect(Collectors.toList())
+        );
+
+        return products.stream()
+                .flatMap(product -> request.getProducts().stream()
+                        .filter(orderProduct -> orderProduct.getProduct_id().equals(product.getId()))
+                        .map(orderProduct -> product.getPrice() * orderProduct.getProduct_quantity()))
+                .reduce(0, Integer::sum);
+    }
+
 }

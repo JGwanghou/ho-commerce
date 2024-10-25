@@ -24,8 +24,12 @@ public class ProductStockRepositoryImpl implements ProductStockRepository {
     }
 
     @Override
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public ProductStockEntity lockedStockSave(ProductStockEntity productStock) {
+    public ProductStockEntity lockedfindById(Long id) {
+        return productStockJpaRepository.findByProductIdWithPessimisticLock(id);
+    }
+
+    @Override
+    public ProductStockEntity stockSave(ProductStockEntity productStock) {
         return productStockJpaRepository.save(productStock);
     }
 

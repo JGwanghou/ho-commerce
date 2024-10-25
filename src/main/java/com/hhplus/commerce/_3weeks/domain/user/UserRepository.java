@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserRepository {
     UserEntity getUserInfo(Long id);
+    UserEntity getUserInfoWithPessimisticLock(Long userId);
     UserEntity payment(UserEntity userEntity);
 
     UserEntity charge(UserEntity userEntity);

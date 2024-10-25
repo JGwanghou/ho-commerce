@@ -13,4 +13,8 @@ public class UserReader {
     public UserEntity getUserInfo(Long id) {
         return userRepository.getUserInfo(id);
     }
+
+    public UserEntity getLockedUserInfo(Long id) {
+        return userRepository.getUserInfoWithPessimisticLock(id);
+    }
 }
