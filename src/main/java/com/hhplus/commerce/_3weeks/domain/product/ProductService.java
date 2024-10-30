@@ -2,7 +2,6 @@ package com.hhplus.commerce._3weeks.domain.product;
 
 import com.hhplus.commerce._3weeks.api.dto.request.OrderProductsRequest;
 import com.hhplus.commerce._3weeks.common.exception.OutOfStockException;
-import com.hhplus.commerce._3weeks.infra.product.ProductUpdater;
 import com.hhplus.commerce._3weeks.infra.product.stock.ProductStockEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +28,10 @@ public class ProductService {
 
     public List<ProductStockEntity> decreaseStock(List<OrderProductsRequest> products) {
          return productUpdater.updateStock(products);
+    }
+
+    public List<ProductStockEntity> LettuceDecreaseStock(List<OrderProductsRequest> products) {
+        return productUpdater.LettuceUpdateStock(products);
     }
 
     public Product readProductDetail(Long productId) {

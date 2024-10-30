@@ -39,6 +39,23 @@ public class OrderUseCase {
         return order.getId();
     }
 
+    public Long orderWithLettuce(OrderRequest request) {
+
+        request.setPaymentPrice((long) getProductsPrice(request));
+
+        // 1. Order테이블, OrderItem 테이블 저장
+        OrderEntity order = orderService.serviceOrder(request.getUser_id(), request);
+
+        // 2. 재고 감소
+        productService.LettuceDecreaseStock(request.getProducts());
+
+        // 3. 유저 포인트 차감
+        userService.payment(request.getUser_id(), request.getPaymentPrice());
+
+        return order.getId();
+    }
+
+
     private Integer getProductsPrice(OrderRequest request) {
         List<Product> products = productService.readProductByIds(
                 request.getProducts().stream()
