@@ -142,4 +142,57 @@ public class OrderConcurrentlyTest {
         assertEquals(0, product.getStock());
         assertEquals(800000, userInfo.getPoint());
     }
+
+    @Test
+    void Redisson_재고_100개_상품에_101번의_주문시도() throws InterruptedException {
+
+        int threadCount = 101;
+        Long userId = 1L;
+        Long productId = 1L;
+
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        List<OrderProductsRequest> orderProductsRequests = List.of(
+                new OrderProductsRequest(productId, 1)
+        );
+
+        OrderRequest orderRequest = new OrderRequest(1L, orderProductsRequests, 0L);
+
+        AtomicInteger successCount = new AtomicInteger();
+        AtomicInteger failCount = new AtomicInteger();
+
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < threadCount; i++) {
+            executorService.submit(() -> {
+                try {
+
+                    orderUseCase.orderWithRedisson(orderRequest);
+                    successCount.getAndIncrement();
+
+                } catch (OutOfStockException e) {
+
+                    failCount.getAndIncrement();
+
+                } finally {
+
+                    latch.countDown();
+
+                }
+            });
+        }
+
+        latch.await();
+        long endTime = System.currentTimeMillis();
+        log.info("실행 시간 : {} milliseconds", endTime - startTime);
+
+        Product product = productService.readProductDetail(productId);
+        UserEntity userInfo = userService.getUserInfo(userId);
+
+        assertEquals(100, successCount.get());
+        assertEquals(1, failCount.get());
+
+        assertEquals(0, product.getStock());
+        assertEquals(800000, userInfo.getPoint());
+    }
 }

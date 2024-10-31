@@ -34,6 +34,10 @@ public class ProductService {
         return productUpdater.LettuceUpdateStock(products);
     }
 
+    public List<ProductStockEntity> RedissonDecreaseStock(List<OrderProductsRequest> products) {
+        return productUpdater.RedissonUpdateStock(products);
+    }
+
     public Product readProductDetail(Long productId) {
         return productReader.readProductDetail(productId);
     }
