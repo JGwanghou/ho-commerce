@@ -8,6 +8,7 @@ import com.hhplus.commerce._3weeks.domain.product.Product;
 import com.hhplus.commerce._3weeks.domain.product.ProductService;
 import com.hhplus.commerce._3weeks.domain.user.UserService;
 import com.hhplus.commerce._3weeks.infra.user.UserEntity;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,6 +148,7 @@ public class OrderConcurrentlyTest {
     }
 
     @Test
+    @DisplayName("Redisson 활용 동시성 테스트")
     void Redisson_재고_100개_상품에_101번의_주문시도() throws InterruptedException {
 
         int threadCount = 101;
