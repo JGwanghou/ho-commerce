@@ -29,13 +29,13 @@ public class ProductService {
     public List<ProductStockEntity> decreaseStock(List<OrderProductsRequest> products) {
          return productUpdater.updateStock(products);
     }
-
-    public List<ProductStockEntity> LettuceDecreaseStock(List<OrderProductsRequest> products) {
-        return productUpdater.LettuceUpdateStock(products);
+//
+    public List<ProductStockEntity> LettuceDecreaseStock(Long productId, Long quantity) {
+        return productUpdater.LettuceUpdateStock(productId, quantity);
     }
 
-    public List<ProductStockEntity> RedissonDecreaseStock(List<OrderProductsRequest> products) {
-        return productUpdater.RedissonUpdateStock(products);
+    public List<ProductStockEntity> RedissonDecreaseStock(Long productId, Long quantity) {
+        return productUpdater.RedissonUpdateStock(productId, quantity);
     }
 
     public Product readProductDetail(Long productId) {

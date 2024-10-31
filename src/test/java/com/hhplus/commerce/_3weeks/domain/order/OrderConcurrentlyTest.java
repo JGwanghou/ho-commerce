@@ -13,6 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -189,10 +192,10 @@ public class OrderConcurrentlyTest {
         Product product = productService.readProductDetail(productId);
         UserEntity userInfo = userService.getUserInfo(userId);
 
+        assertEquals(0, product.getStock());
         assertEquals(100, successCount.get());
         assertEquals(1, failCount.get());
 
-        assertEquals(0, product.getStock());
         assertEquals(800000, userInfo.getPoint());
     }
 }
