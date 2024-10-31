@@ -19,31 +19,21 @@ public class UserService {
     private final UserReader userReader;
     private final UserUpdater userUpdater;
 
-    private final ConcurrentHashMap<Long, UserEntity> userCache = new ConcurrentHashMap<>();
-
     public UserEntity getUserInfo(Long id) {
         return userReader.getUserInfo(id);
     }
 
     @Transactional
     public UserEntity chargePoint(Long userId, Long point) {
-        UserEntity userInfo = userCache.computeIfAbsent(userId, userReader::getUserInfo);
+        UserEntity userInfo = userReader.getLockedUserInfo(userId);
 
-        UserEntity addPointUser = userUpdater.charge(userInfo, point);
-
-        userCache.put(userId, addPointUser);
-
-        return addPointUser;
+        return userUpdater.charge(userInfo, point);
     }
 
     @Transactional
-    public UserEntity payment(Long userId, List<Product> products, Long point) {
-        UserEntity userInfo = userCache.computeIfAbsent(userId, userReader::getUserInfo);
+    public UserEntity payment(Long userId, Long point) {
+        UserEntity userInfo = userReader.getLockedUserInfo(userId);
 
-        UserEntity decreaseUser = userUpdater.payment(userInfo, products, point);
-
-        userCache.put(userId, decreaseUser);
-
-        return decreaseUser;
+        return userUpdater.payment(userInfo, point);
     }
 }

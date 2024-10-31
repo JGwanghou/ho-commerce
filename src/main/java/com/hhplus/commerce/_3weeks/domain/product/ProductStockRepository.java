@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ProductStockRepository {
     ProductStockEntity findById(Long id);
-    ProductStockEntity lockedStockSave(ProductStockEntity productStock);
+    ProductStockEntity lockedfindById(Long id);
+    ProductStockEntity stockSave(ProductStockEntity productStock);
     void decreaseStock(List<OrderProductsRequest> orderProductsRequests);
 }

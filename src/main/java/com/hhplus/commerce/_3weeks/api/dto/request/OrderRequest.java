@@ -1,6 +1,7 @@
 package com.hhplus.commerce._3weeks.api.dto.request;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -8,6 +9,8 @@ import java.util.List;
 public class OrderRequest {
     private Long user_id;
     private List<OrderProductsRequest> products;
+
+    @Setter
     private Long paymentPrice;
 
     public OrderRequest(Long user_id, List<OrderProductsRequest> products, Long paymentPrice) {

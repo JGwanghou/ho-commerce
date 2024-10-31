@@ -20,12 +20,16 @@ public class ProductStockRepositoryImpl implements ProductStockRepository {
     @Override
     @Transactional(readOnly = true)
     public ProductStockEntity findById(Long id) {
-        return productStockJpaRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("상품 재고 정보가 없습니다."));
+        return productStockJpaRepository.findById(id).orElseThrow(ProductNotFoundException::new);
     }
 
     @Override
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public ProductStockEntity lockedStockSave(ProductStockEntity productStock) {
+    public ProductStockEntity lockedfindById(Long id) {
+        return productStockJpaRepository.findByProductIdWithPessimisticLock(id);
+    }
+
+    @Override
+    public ProductStockEntity stockSave(ProductStockEntity productStock) {
         return productStockJpaRepository.save(productStock);
     }
 
