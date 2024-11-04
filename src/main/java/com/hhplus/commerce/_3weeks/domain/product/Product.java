@@ -12,9 +12,9 @@ public class Product {
     private int stock;
 
     // JOIN 인기상품 판매수량 추가필드
-    private int sale_count;
+    private Long sale_count;
 
-    public Product(String name, int sale_count) {
+    public Product(String name, Long sale_count) {
         this.name = name;
         this.sale_count = sale_count;
     }

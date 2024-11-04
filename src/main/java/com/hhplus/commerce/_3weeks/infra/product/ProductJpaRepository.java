@@ -36,7 +36,7 @@ public interface ProductJpaRepository extends JpaRepository<ProductEntity, Long>
 
 
     @Query("SELECT " +
-            "new com.hhplus.commerce._3weeks.domain.product.Product(p.productName, oi.quantity ) " +
+            "new com.hhplus.commerce._3weeks.domain.product.Product(p.productName, SUM(oi.quantity)) " +
             "FROM ProductEntity p " +
             "JOIN OrderItemEntity oi " +
             "ON p.id = oi.product_id " +

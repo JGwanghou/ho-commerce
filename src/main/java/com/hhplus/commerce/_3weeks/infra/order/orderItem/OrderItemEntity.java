@@ -4,8 +4,10 @@ import com.hhplus.commerce._3weeks.common.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "orderItem")
+@Table(name = "order_Item")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class OrderItemEntity extends BaseEntity {
@@ -28,4 +30,5 @@ public class OrderItemEntity extends BaseEntity {
         this.product_id = product_id;
         this.quantity = quantity;
     }
+
 }
