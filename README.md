@@ -9,6 +9,7 @@
 
 # 5. [Swagger](docs/05_Swagger.md)
 
+# 6. [동시성 보고서](https://kh-well.tistory.com/74)
 ---
 
 

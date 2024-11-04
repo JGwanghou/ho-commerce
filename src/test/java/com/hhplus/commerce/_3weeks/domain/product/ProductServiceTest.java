@@ -1,7 +1,6 @@
 package com.hhplus.commerce._3weeks.domain.product;
 
 import com.hhplus.commerce._3weeks.api.dto.request.OrderProductsRequest;
-import com.hhplus.commerce._3weeks.infra.product.ProductUpdater;
 import com.hhplus.commerce._3weeks.infra.product.stock.ProductStockEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

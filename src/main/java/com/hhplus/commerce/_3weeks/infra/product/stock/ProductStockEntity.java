@@ -9,12 +9,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product_stock")
 @Getter
+@Slf4j
 public class ProductStockEntity extends BaseEntity {
     @Id
     @Column(name = "product_id", nullable = false)
@@ -23,12 +25,12 @@ public class ProductStockEntity extends BaseEntity {
     @Column(name = "stock", nullable = false)
     private int stock;
 
-    public ProductStockEntity decreaseStock(OrderProductsRequest request) {
-        if (this.stock < request.getProduct_quantity()) {
+    public ProductStockEntity decreaseStock(Long productId, Long quantity) {
+        if (this.stock < quantity) {
             throw new OutOfStockException();
         }
 
-        this.stock -= request.getProduct_quantity();
+        this.stock -= quantity;
         return this;
     }
 }
