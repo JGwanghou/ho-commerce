@@ -4,6 +4,7 @@ import com.hhplus.commerce._3weeks.api.dto.request.OrderProductsRequest;
 import com.hhplus.commerce._3weeks.common.exception.OutOfStockException;
 import com.hhplus.commerce._3weeks.infra.product.stock.ProductStockEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ProductService {
         return productReader.readProductByIds(productIds);
     }
 
+    @Cacheable(value = "popularProducts", key = "'top5'")
     public List<Product> readProductPopulars() {
         return productReader.readProductPopulars();
     }
