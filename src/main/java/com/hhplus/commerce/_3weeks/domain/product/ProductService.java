@@ -40,6 +40,11 @@ public class ProductService {
         return productUpdater.RedissonUpdateStock(productId, quantity);
     }
 
+    @Cacheable(
+            value = "products", // 캐시 이름
+            key = "#productId", // 캐시 키
+            unless = "#result == null" // 결과가 null인 경우 캐시하지 않음
+    )
     public Product readProductDetail(Long productId) {
         return productReader.readProductDetail(productId);
     }
