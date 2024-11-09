@@ -38,6 +38,6 @@ public class ProductReader {
             throw new ProductNotFoundException();
         }
 
-        return productRepository.findProductById(id);
+        return product;
     }
 }
