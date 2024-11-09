@@ -8,23 +8,25 @@ public class Product {
     private String name;
     private int price;
 
-    // JOIN 상품조회 추가필드
-    private int stock;
+    // int -> Integer로 변경하여 null 허용
+    private Integer stock;
+    private Long sale_count;
 
-    // JOIN 인기상품 판매수량 추가필드
-    private int sale_count;
-
-    public Product(String name, int sale_count) {
-        this.name = name;
-        this.sale_count = sale_count;
-    }
-
-    public Product(Long id, String name, int price, int stock) {
+    // findByIdWithStock 용 생성자
+    public Product(Long id, String name, int price, Integer stock) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.stock = stock;
+        this.sale_count = null;
     }
 
-
+    // findProductPopulars 용 생성자
+    public Product(String name, Long quantity) {
+        this.id = null;
+        this.name = name;
+        this.price = 0;
+        this.stock = 0;
+        this.sale_count = quantity;
+    }
 }

@@ -4,6 +4,7 @@ import com.hhplus.commerce._3weeks.api.intercepter.LogPrintInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -11,6 +12,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class LogInterceptorConfig implements WebMvcConfigurer {
 
     private final LogPrintInterceptor logPrintInterceptor;
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

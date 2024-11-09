@@ -12,14 +12,14 @@ import java.util.List;
 public interface ProductJpaRepository extends JpaRepository<ProductEntity, Long> {
 
     @Query("SELECT " +
-                "new com.hhplus.commerce._3weeks.domain.product.Product(p.id, p.productName, p.price, ps.stock) " +
+                "new com.hhplus.commerce._3weeks.domain.product.Product(p.id, p.name, p.price, ps.stock) " +
             "FROM ProductEntity p " +
             "LEFT JOIN ProductStockEntity ps " +
             "ON p.id = ps.productId")
     List<Product> findAllWithStock();
 
     @Query("SELECT " +
-            "new com.hhplus.commerce._3weeks.domain.product.Product(p.id, p.productName, p.price, ps.stock) " +
+            "new com.hhplus.commerce._3weeks.domain.product.Product(p.id, p.name, p.price, ps.stock) " +
             "FROM ProductEntity p " +
             "LEFT JOIN ProductStockEntity ps " +
             "ON p.id = ps.productId " +
@@ -27,7 +27,7 @@ public interface ProductJpaRepository extends JpaRepository<ProductEntity, Long>
     List<Product> findByIdsWithStock(List<Long> productIds);
 
     @Query("SELECT " +
-            "new com.hhplus.commerce._3weeks.domain.product.Product(p.id, p.productName, p.price, ps.stock) " +
+            "new com.hhplus.commerce._3weeks.domain.product.Product(p.id, p.name, p.price, COALESCE(ps.stock, 0)) " +
             "FROM ProductEntity p " +
             "LEFT JOIN ProductStockEntity ps " +
             "ON p.id = ps.productId " +
@@ -36,7 +36,7 @@ public interface ProductJpaRepository extends JpaRepository<ProductEntity, Long>
 
 
     @Query("SELECT " +
-            "new com.hhplus.commerce._3weeks.domain.product.Product(p.productName, oi.quantity ) " +
+            "new com.hhplus.commerce._3weeks.domain.product.Product(p.name, SUM(oi.quantity)) " +
             "FROM ProductEntity p " +
             "JOIN OrderItemEntity oi " +
             "ON p.id = oi.product_id " +

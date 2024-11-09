@@ -5,15 +5,13 @@ import com.hhplus.commerce._3weeks.common.config.BaseEntity;
 import com.hhplus.commerce._3weeks.common.exception.OutOfStockException;
 import com.hhplus.commerce._3weeks.domain.product.Product;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @Table(name = "product_stock")
 @Getter
 @Slf4j
