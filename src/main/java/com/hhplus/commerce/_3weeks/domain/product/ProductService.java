@@ -23,7 +23,7 @@ public class ProductService {
         return productReader.readProductByIds(productIds);
     }
 
-    @Cacheable(value = "popularProducts", key = "'top5'")
+    @Cacheable(value = "popularProducts", key = "'top5'", cacheManager = "redisCacheManager")
     public List<Product> readProductPopulars() {
         return productReader.readProductPopulars();
     }

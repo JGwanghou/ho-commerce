@@ -10,8 +10,9 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class LocalCacheConfig {
+
     @Bean
-    public CacheManager cacheManager() {
+    public CacheManager LocalCacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .expireAfterWrite(1, TimeUnit.MINUTES)  // 1분 후 캐시 만료
