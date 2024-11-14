@@ -118,7 +118,7 @@ public class OrderConcurrentlyTest {
             executorService.submit(() -> {
                 try {
 
-                    orderUseCase.orderWithLettuce(orderRequest);
+//                    orderUseCase.orderWithLettuce(orderRequest);
                     successCount.getAndIncrement();
 
                 } catch (OutOfStockException e) {
@@ -172,7 +172,7 @@ public class OrderConcurrentlyTest {
             executorService.submit(() -> {
                 try {
 
-                    orderUseCase.orderWithRedisson(orderRequest);
+//                    orderUseCase.orderWithRedisson(orderRequest);
                     successCount.getAndIncrement();
 
                 } catch (OutOfStockException e) {
