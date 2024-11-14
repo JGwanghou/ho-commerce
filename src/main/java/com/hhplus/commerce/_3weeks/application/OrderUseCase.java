@@ -2,18 +2,16 @@ package com.hhplus.commerce._3weeks.application;
 
 import com.hhplus.commerce._3weeks.api.dto.request.OrderProductsRequest;
 import com.hhplus.commerce._3weeks.api.dto.request.OrderRequest;
-import com.hhplus.commerce._3weeks.domain.order.Order;
 import com.hhplus.commerce._3weeks.domain.order.OrderService;
+import com.hhplus.commerce._3weeks.domain.order.event.OrderCreatedEvent;
 import com.hhplus.commerce._3weeks.domain.product.Product;
 import com.hhplus.commerce._3weeks.domain.product.ProductService;
-import com.hhplus.commerce._3weeks.domain.user.User;
 import com.hhplus.commerce._3weeks.domain.user.UserService;
-import com.hhplus.commerce._3weeks.infra.RedisLockRepository;
 import com.hhplus.commerce._3weeks.infra.order.OrderEntity;
-import com.hhplus.commerce._3weeks.infra.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,56 +26,9 @@ public class OrderUseCase {
     private final OrderService orderService;
 
     private final RedissonClient redissonClient;
-    private final RedisLockRepository redisLockRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public Long order(OrderRequest request) {
-
-        request.setPaymentPrice((long) getProductsPrice(request));
-
-        // 1. Order테이블, OrderItem 테이블 저장
-        OrderEntity order = orderService.serviceOrder(request.getUser_id(), request);
-
-        // 2. 재고 감소
-        productService.decreaseStock(request.getProducts());
-
-        // 3. 유저 포인트 차감
-        userService.payment(request.getUser_id(), request.getPaymentPrice());
-
-        return order.getId();
-    }
-
-    public Long orderWithLettuce(OrderRequest request) {
-
-        request.setPaymentPrice((long) getProductsPrice(request));
-
-        // 1. Order테이블, OrderItem 테이블 저장
-        OrderEntity order = orderService.serviceOrder(request.getUser_id(), request);
-
-        // 2. 재고 감소
-        for (OrderProductsRequest prod : request.getProducts()) {
-            while(!redisLockRepository.lock(prod.getProduct_id())){
-                try{
-                    Thread.sleep(1000);
-                }catch (InterruptedException e){
-                    throw new RuntimeException(e);
-                }
-            }
-
-            try{
-                productService.LettuceDecreaseStock(prod.getProduct_id(), (long) prod.getProduct_quantity());
-            }finally {
-                redisLockRepository.unlock(prod.getProduct_id());
-            }
-        }
-
-
-        // 3. 유저 포인트 차감
-        userService.payment(request.getUser_id(), request.getPaymentPrice());
-
-        return order.getId();
-    }
-
-    public Long orderWithRedisson(OrderRequest request) {
 
         request.setPaymentPrice((long) getProductsPrice(request));
 
@@ -103,7 +54,7 @@ public class OrderUseCase {
 
         // 3. 유저 포인트 차감
         userService.payment(request.getUser_id(), request.getPaymentPrice());
-
+        applicationEventPublisher.publishEvent(new OrderCreatedEvent(this, request.getUser_id(), request.getProducts()));
         return order.getId();
     }
 
