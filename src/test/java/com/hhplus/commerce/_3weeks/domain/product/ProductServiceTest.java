@@ -35,8 +35,8 @@ class ProductServiceTest {
         List<Product> products = productService.readProductAll();
 
         assertEquals(2, products.size());
-        assertEquals("초코파이", products.get(0).getProduct_name());
-        assertEquals("새송이버섯", products.get(1).getProduct_name());
+        assertEquals("초코파이", products.get(0).getName());
+        assertEquals("새송이버섯", products.get(1).getName());
     }
 
     @Test
@@ -51,8 +51,8 @@ class ProductServiceTest {
         List<Product> products = productService.readProductByIds(productIds);
 
         assertEquals(2, products.size());
-        assertEquals("초코파이", products.get(0).getProduct_name());
-        assertEquals("새송이버섯", products.get(1).getProduct_name());
+        assertEquals("초코파이", products.get(0).getName());
+        assertEquals("새송이버섯", products.get(1).getName());
     }
 
     @Test
@@ -88,7 +88,7 @@ class ProductServiceTest {
         Product result = productService.readProductDetail(productId);
 
         assertEquals(1L, result.getId());
-        assertEquals("초코파이", result.getProduct_name());
+        assertEquals("초코파이", result.getName());
         assertEquals(2000, result.getPrice());
         assertEquals(10, result.getStock());
     }
@@ -98,8 +98,8 @@ class ProductServiceTest {
         int[] sale_count = new int[]{10, 30};
 
         List<Product> products = List.of(
-                new Product("토마토", sale_count[0]),
-                new Product("양배추", sale_count[1])
+                new Product("토마토", (long) sale_count[0]),
+                new Product("양배추", (long) sale_count[1])
         );
 
         when(productReader.readProductPopulars()).thenReturn(products);
@@ -107,10 +107,10 @@ class ProductServiceTest {
         List<Product> populars = productService.readProductPopulars();
 
         assertEquals(2, populars.size());
-        assertEquals(populars.get(0).getProduct_name(), products.get(0).getProduct_name());
+        assertEquals(populars.get(0).getName(), products.get(0).getName());
         assertEquals(populars.get(0).getSale_count(), products.get(0).getSale_count());
 
-        assertEquals(populars.get(1).getProduct_name(), products.get(1).getProduct_name());
+        assertEquals(populars.get(1).getName(), products.get(1).getName());
         assertEquals(populars.get(1).getSale_count(), products.get(1).getSale_count());
     }
 }

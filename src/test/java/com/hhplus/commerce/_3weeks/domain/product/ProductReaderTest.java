@@ -44,7 +44,7 @@ public class ProductReaderTest {
 
         Product result = productReader.readProductDetail(productId);
 
-        assertEquals("순두부", result.getProduct_name());
+        assertEquals("순두부", result.getName());
         assertEquals(2000, result.getPrice());
         assertEquals(2, result.getStock());
     }
