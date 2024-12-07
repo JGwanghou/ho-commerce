@@ -25,6 +25,12 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.findByNameWithPessimisticLock(userId);
     }
 
+
+    public UserEntity save(UserEntity userEntity) {
+        return userJpaRepository.save(userEntity);
+    }
+
+
     @Override
     public UserEntity payment(UserEntity userEntity) {
         return userJpaRepository.save(userEntity);

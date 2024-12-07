@@ -14,6 +14,9 @@ import java.util.List;
 public class UserUpdater {
     private final UserRepository userRepository;
 
+    public UserEntity save(UserEntity user) {
+        return userRepository.save(user);
+    }
 
     public UserEntity charge(UserEntity user, Long point) {
         user.chargePoint(point);

@@ -24,7 +24,7 @@ public class ProductUpdater {
         List<ProductStockEntity> stockEntities = new ArrayList<>();
 
         for (OrderProductsRequest orderRequest : req) {
-            ProductStockEntity productStock = productStockRepository.lockedfindById(orderRequest.getProduct_id());
+            ProductStockEntity productStock = productStockRepository.findByProductIdWithPessimisticLock(orderRequest.getProduct_id());
             productStock.decreaseStock(orderRequest.getProduct_id(), (long) orderRequest.getProduct_quantity());
 
             stockEntities.add(productStock);

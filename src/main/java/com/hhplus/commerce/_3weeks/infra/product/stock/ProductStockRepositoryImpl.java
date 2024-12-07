@@ -24,7 +24,7 @@ public class ProductStockRepositoryImpl implements ProductStockRepository {
     }
 
     @Override
-    public ProductStockEntity lockedfindById(Long id) {
+    public ProductStockEntity findByProductIdWithPessimisticLock(Long id) {
         return productStockJpaRepository.findByProductIdWithPessimisticLock(id);
     }
 

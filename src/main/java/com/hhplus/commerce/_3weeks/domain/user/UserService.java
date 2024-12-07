@@ -23,6 +23,10 @@ public class UserService {
         return userReader.getUserInfo(id);
     }
 
+    public UserEntity save(UserEntity user) {
+        return userUpdater.save(user);
+    }
+
     @Transactional
     public UserEntity chargePoint(Long userId, Long point) {
         UserEntity userInfo = userReader.getLockedUserInfo(userId);

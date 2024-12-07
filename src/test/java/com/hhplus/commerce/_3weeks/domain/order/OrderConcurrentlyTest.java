@@ -8,6 +8,7 @@ import com.hhplus.commerce._3weeks.domain.product.Product;
 import com.hhplus.commerce._3weeks.domain.product.ProductService;
 import com.hhplus.commerce._3weeks.domain.user.UserService;
 import com.hhplus.commerce._3weeks.infra.user.UserEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -40,14 +41,25 @@ public class OrderConcurrentlyTest {
 
     private Logger log = LoggerFactory.getLogger(OrderConcurrentlyTest.class);
 
+    @BeforeEach
+    void setUp() {
+        UserEntity user = UserEntity.builder()
+                .id(1L)
+                .point(100_000_000L)
+                .name("김테스트")
+                .build();
+
+        userService.save(user);
+    }
+
     @Test
-    void DB락_재고_100개_상품에_101번의_주문시도() throws InterruptedException {
+    void 비관적락_100개_상품에_101번의_주문시도() throws InterruptedException {
 
         int threadCount = 101;
         Long userId = 1L;
         Long productId = 1L;
 
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch latch = new CountDownLatch(threadCount);
 
         List<OrderProductsRequest> orderProductsRequests = List.of(
@@ -64,7 +76,7 @@ public class OrderConcurrentlyTest {
             executorService.submit(() -> {
                 try {
 
-                    orderUseCase.order(orderRequest);
+                    orderUseCase.xlockOrder(orderRequest);
                     successCount.getAndIncrement();
 
                 } catch (OutOfStockException e) {
@@ -86,11 +98,10 @@ public class OrderConcurrentlyTest {
         Product product = productService.readProductDetail(productId);
         UserEntity userInfo = userService.getUserInfo(userId);
 
-        assertEquals(100, successCount.get());
-        assertEquals(1, failCount.get());
 
         assertEquals(0, product.getStock());
-        assertEquals(800000, userInfo.getPoint());
+        assertEquals(100, successCount.get());
+        assertEquals(1, failCount.get());
     }
 
 

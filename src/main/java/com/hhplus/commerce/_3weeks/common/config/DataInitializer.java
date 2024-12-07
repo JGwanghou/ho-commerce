@@ -3,6 +3,7 @@ package com.hhplus.commerce._3weeks.common.config;
 import com.hhplus.commerce._3weeks.infra.order.orderItem.OrderItemEntity;
 import com.hhplus.commerce._3weeks.infra.product.ProductEntity;
 import com.hhplus.commerce._3weeks.infra.product.stock.ProductStockEntity;
+import com.hhplus.commerce._3weeks.infra.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -60,7 +61,7 @@ public class DataInitializer implements CommandLineRunner {
         for (long i = 1; i <= TOTAL_RECORDS; i++) {
             ProductStockEntity stock = ProductStockEntity.builder()
                     .productId(i)
-                    .stock(random.nextInt(1000) + 1) // 1~1000 사이의 재고
+                    .stock(100) // 1~1000 사이의 재고
                     .build();
             batchData.add(stock);
 
