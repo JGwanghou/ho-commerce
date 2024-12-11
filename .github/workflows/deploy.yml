@@ -1,15 +1,22 @@
 name: Gihub Actions
 
+# main 브랜치에 푸쉬될 때 아래 job 실행
 on:
   push:
     branches:
       - main
 
-
+# 하나의 Workflow는 1개 이상의 Job
+# 여러 Job은 기본적으로 병렬 수행
 jobs:
+  # Job 식별 id
   My-Deploy-Job:
     runs-on: ubuntu-latest
 
     steps:
       - name: Hello world
         run: echo "Hello world"
+
+      - name: 민감한 값
+        run: |
+          echo ${{ secrets.COMMERCE_SECRET }}
