@@ -14,3 +14,12 @@
 ### 7. [Index 개선 시도](https://kh-well.tistory.com/76)
 
 ---
+
+### AS-IS
+최초 push 
+Github -> Github Actions (JDK, ./gradlew 빌드) jar 넘기기 -> ec2
+단점: 무중단 배포가 아님
+
+### TO-BE(예정)
+Github Actions, ECR/ECS, AWS Code Deploy, AWS S3, EC2
+
