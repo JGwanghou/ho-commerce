@@ -4,6 +4,7 @@ package com.hhplus.commerce._3weeks.common.config;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,27 +23,37 @@ import java.time.Duration;
 
 @Configuration
 public class RedisConfig {
+
+    private static final String REDISSON_HOST_PREFIX = "rediss://";
+
     @Value("${spring.data.redis.host}")
     private String redisHost;
 
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
-    private static final String REDISSON_HOST_PREFIX = "redis://";
+    @Value("${spring.data.redis.password}")
+    private String redisPassword;
 
-    // lock
+    // Redisson을 사용하여 Redis 클라이언트를 생성(분산 락)
     @Bean
     public RedissonClient redissonClient() {
-        RedissonClient redisson = null;
         Config config = new Config();
-        config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + redisHost + ":" + redisPort);
-        redisson = Redisson.create(config);
-        return redisson;
+        config.useSingleServer()
+                .setAddress(REDISSON_HOST_PREFIX + redisHost + ":" + redisPort)
+                .setPassword(redisPassword)
+                .setSslEnableEndpointIdentification(true);
+        return Redisson.create(config);
     }
 
+    // Spring Data Redis에서 Redis 연결을 관리하기 위한 RedisConnectionFactory를 생성(Redis 데이터 읽기/쓰기)
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(redisHost, redisPort);
+        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+        configuration.setHostName(redisHost);
+        configuration.setPort(redisPort);
+        configuration.setPassword(redisPassword); // 비밀번호 설정
+        return new LettuceConnectionFactory(configuration);
     }
 
     @Bean
