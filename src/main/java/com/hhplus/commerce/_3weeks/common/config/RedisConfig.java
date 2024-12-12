@@ -24,7 +24,7 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig {
 
-    private static final String REDISSON_HOST_PREFIX = "rediss://";
+    private static final String REDISSON_HOST_PREFIX = "redis://";
 
     @Value("${spring.data.redis.host}")
     private String redisHost;
@@ -38,9 +38,11 @@ public class RedisConfig {
     // Redisson을 사용하여 Redis 클라이언트를 생성(분산 락)
     @Bean
     public RedissonClient redissonClient() {
+        String redisAddress = REDISSON_HOST_PREFIX + redisHost + ":" + redisPort; // redis://localhost:6379
+
         Config config = new Config();
         config.useSingleServer()
-                .setAddress(REDISSON_HOST_PREFIX + redisHost + ":" + redisPort)
+                .setAddress(redisAddress)
                 .setPassword(redisPassword)
                 .setSslEnableEndpointIdentification(true);
         return Redisson.create(config);
