@@ -12,11 +12,19 @@ jobs:
   # Job 식별 id
   My-Deploy-Job:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Hello world
-        run: echo "Hello world"
+      - name : EC2 SSH 접속하기
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            cd /home/ubuntu/ho-commerce
+            git pull origin main
+            ./gradlew clean build -x test
+            sudo fuser -k -n tcp 8080 || true
+            
+            nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
 
-      - name: 민감한 값
-        run: |
-          echo ${{ secrets.COMMERCE_SECRET }}

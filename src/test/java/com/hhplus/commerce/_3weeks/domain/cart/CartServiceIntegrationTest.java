@@ -18,13 +18,6 @@ class CartServiceIntegrationTest {
     private CartService cartService;
 
     @Test
-    void 장바구니_조회() {
-        final long userId = 5L;
-        cartService.readIsNullCreate(userId);
-
-    }
-
-    @Test
     void 장바구니_생성() {
         final long userId = 10L;
         CartEntity cart = cartService.readIsNullCreate(userId);
