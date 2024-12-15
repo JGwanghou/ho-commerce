@@ -1,1 +1,5 @@
--- INSERT INTO USERS (ID, NAME, POINT) VALUES (1, '일광호', 1000000);
+INSERT INTO users (name, hpNo)
+VALUES ('테스트계정', '01040401233');
+
+INSERT INTO point (userId, amount, balanceAfter)
+VALUES (1, 0, 0);

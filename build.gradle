@@ -41,6 +41,11 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     runtimeOnly 'com.mysql:mysql-connector-j'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    testImplementation "org.testcontainers:testcontainers:1.19.3"
+    testImplementation "org.testcontainers:junit-jupiter:1.19.3"
+    testImplementation "org.testcontainers:mysql:1.19.3"
+    testImplementation "com.redis.testcontainers:testcontainers-redis-junit:1.6.4"
 }
 
 tasks.named('test') {

@@ -37,3 +37,5 @@ out/
 .vscode/
 
 application.properties
+application-stage.properties
+application-test.properties

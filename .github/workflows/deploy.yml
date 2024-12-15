@@ -13,7 +13,7 @@ jobs:
   My-Deploy-Job:
     runs-on: ubuntu-latest
     steps:
-      - name: Github Repository 최근 커밋파일 불러오기
+      - name: Github Repository 파일 불러오기
         uses: actions/checkout@v4
 
       - name: JDK 17 설치
