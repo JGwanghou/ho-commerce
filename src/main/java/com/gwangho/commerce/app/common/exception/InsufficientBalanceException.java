@@ -1,6 +1,7 @@
-package com.gwangho.commerce.app.common;
+package com.gwangho.commerce.app.common.exception;
 
 
+import com.gwangho.commerce.app.common.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

@@ -2,9 +2,18 @@ package com.gwangho.commerce.app.api.point;
 
 import com.gwangho.commerce.app.application.PointFacade;
 import com.gwangho.commerce.app.domain.point.service.PointCommand;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,11 +30,12 @@ public class PointController {
     }
 
     @PostMapping("{userId}/points")
-    public PointDto.PointResponse chargePoint(
+    public PointResponse chargePoint(
+            @RequestHeader("Idempotency-Key") String idempotencyKey,
             @PathVariable Long userId,
-            @RequestBody @Valid PointDto.PointCreate charge
+            @RequestBody @Valid PointChargeRequest charge
     ) {
-        return pointFacade.charge(userId, new PointCommand.ChargePoint(charge.chargeAmount()));
+        return pointFacade.charge(userId, new PointCommand.ChargePoint(charge.getChargeAmount()));
     }
 
 }
