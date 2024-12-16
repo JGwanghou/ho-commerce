@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -18,6 +20,9 @@ public class User extends BaseEntity {
 
     private String name;
 
+    @Column(precision = 7, scale = 1, nullable = false)
+    private BigDecimal point;
+
     private String hpNo;
 
     @Builder
@@ -25,5 +30,10 @@ public class User extends BaseEntity {
         this.id = id;
         this.name = name;
         this.hpNo = hpNo;
+    }
+
+    public User addPoint(BigDecimal amount){
+        this.point = this.point.add(amount);
+        return this;
     }
 }

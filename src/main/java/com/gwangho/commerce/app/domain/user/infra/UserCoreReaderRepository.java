@@ -1,6 +1,6 @@
 package com.gwangho.commerce.app.domain.user.infra;
 
-import com.gwangho.commerce.app.common.UserNotFoundException;
+import com.gwangho.commerce.app.common.exception.UserNotFoundException;
 import com.gwangho.commerce.app.domain.user.User;
 import com.gwangho.commerce.app.domain.user.repository.UserReaderRepository;
 import lombok.RequiredArgsConstructor;

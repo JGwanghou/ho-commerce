@@ -1,6 +1,6 @@
 package com.gwangho.commerce.app.domain.point.infra;
 
-import com.gwangho.commerce.app.common.UserNotFoundException;
+import com.gwangho.commerce.app.common.exception.UserNotFoundException;
 import com.gwangho.commerce.app.domain.point.Point;
 import com.gwangho.commerce.app.domain.point.repository.PointReaderRepository;
 import lombok.RequiredArgsConstructor;

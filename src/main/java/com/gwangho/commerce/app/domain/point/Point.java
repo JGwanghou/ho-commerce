@@ -25,29 +25,14 @@ public class Point extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PointType type;
 
+    @Column(precision = 7, scale = 1, nullable = false)
     private BigDecimal amount;
 
-    private BigDecimal balanceAfter;
-
     @Builder
-    public Point(Long id, Long userId, PointType status, BigDecimal amount, BigDecimal balanceAfter) {
+    public Point(Long id, Long userId, PointType type, BigDecimal amount) {
         this.id = id;
         this.userId = userId;
         this.type = type;
         this.amount = amount;
-        this.balanceAfter = balanceAfter;
-    }
-
-    public Point charge(Long userId, PointType type, BigDecimal amount){
-        this.userId = userId;
-        this.type = type;
-        this.amount = amount;
-
-        //
-        if(Objects.equals(this.balanceAfter, BigDecimal.ZERO)) {
-            this.balanceAfter = amount;
-        }
-
-        return this;
     }
 }
