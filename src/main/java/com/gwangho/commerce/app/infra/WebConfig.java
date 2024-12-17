@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(idempotencyInterceptor)
-                .addPathPatterns("/api/v1/**"); // 경로 패턴 지정 필수
+                .addPathPatterns("/api/v1/users/**"); // 경로 패턴 지정 필수
     }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

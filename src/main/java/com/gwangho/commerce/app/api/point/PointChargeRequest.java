@@ -1,8 +1,6 @@
 package com.gwangho.commerce.app.api.point;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +12,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class PointChargeRequest {
 
-    @Positive(message = "충전 금액은 0원 이상이어야 합니다.")
+    private Long userId;
+    private String name;
+    private String hpNo;
+
+    @DecimalMin(value = "1000", message = "최소 충전 금액은 1,000원입니다.")
+    @DecimalMax(value = "1000000", message = "최대 충전 금액은 1,000,000원입니다.")
     private BigDecimal chargeAmount;
 
     public PointChargeRequest(Long userId, BigDecimal chargeAmount) {

@@ -6,7 +6,6 @@ import com.gwangho.commerce.app.domain.point.repository.PointReaderRepository;
 import com.gwangho.commerce.app.domain.point.repository.PointStoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +13,7 @@ public class PointService {
     private final PointReaderRepository pointReaderRepository;
     private final PointStoreRepository pointStoreRepository;
 
-    public Point historyInsert(Long userId, PointCommand.ChargePoint charge) {
+    public Point historyInsert(Long userId, PointCommand.ChargePoint charge) throws Exception {
         return pointStoreRepository.save(
                 Point.builder()
                     .userId(userId)

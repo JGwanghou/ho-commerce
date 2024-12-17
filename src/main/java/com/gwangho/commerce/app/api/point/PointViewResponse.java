@@ -8,14 +8,16 @@ import java.math.BigDecimal;
 
 @NoArgsConstructor
 @Getter
-public class PointResponse {
+public class PointViewResponse {
+    String idempotencyKey;
     Long userId;
     String name;
     String hpNo;
     BigDecimal chargeAmount;
 
     @Builder
-    public PointResponse(Long userId, String name, String hpNo, BigDecimal chargeAmount) {
+    public PointViewResponse(String idempotencyKey, Long userId, String name, String hpNo, BigDecimal chargeAmount) {
+        this.idempotencyKey = idempotencyKey;
         this.userId = userId;
         this.name = name;
         this.hpNo = hpNo;
