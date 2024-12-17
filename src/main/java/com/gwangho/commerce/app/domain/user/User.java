@@ -1,6 +1,7 @@
 package com.gwangho.commerce.app.domain.user;
 
 import com.gwangho.commerce.app.common.BaseEntity;
+import com.gwangho.commerce.app.common.exception.InvalidChargeAmountException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class User extends BaseEntity {
     private String name;
 
     @Column(precision = 7, scale = 1, nullable = false)
-    private BigDecimal point;
+    private BigDecimal point = BigDecimal.ZERO;
 
     private String hpNo;
 
@@ -33,6 +34,15 @@ public class User extends BaseEntity {
     }
 
     public User addPoint(BigDecimal amount){
+        if (
+                amount.compareTo(BigDecimal.valueOf(1000)) < 0 ||
+                amount.compareTo(BigDecimal.valueOf(1_000_000)) > 0 ||
+                amount == null ||
+                amount.compareTo(BigDecimal.ZERO) <= 0)
+        {
+            throw new InvalidChargeAmountException();
+        }
+
         this.point = this.point.add(amount);
         return this;
     }

@@ -1,10 +1,12 @@
-GET http://localhost:8080/api/v1/users/ㅇ/points
+
+### GET 포인트 조회
+GET {{root-path}}/api/v1/users/1/points
 
 ### POST 포인트 충전
-POST {{root-path}}/api/v1/users/dd/points
+POST {{root-path}}/api/v1/users/1/points
 Content-Type: application/json
-Idempotency-Key: "20241216"
+Idempotency-Key: 2024121718210034623
 
 {
-  "chargeAmount": "-10.0"
+  "chargeAmount": "1000.0"
 }

@@ -5,6 +5,6 @@ import com.gwangho.commerce.app.domain.user.User;
 import java.util.Optional;
 
 public interface UserReaderRepository {
-    User findByIdOrThrow(Long userId);
+    User findByIdOruUserNotFoundThrow(Long userId);
     Optional<User> findById(Long userId);
 }

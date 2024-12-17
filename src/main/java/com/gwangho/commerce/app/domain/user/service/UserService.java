@@ -14,16 +14,14 @@ public class UserService {
     private final UserReaderRepository userReaderRepository;
     private final UserStoreRepository userStoreRepository;
 
-    public User findByIdOrThrow(Long userId) {
-        return userReaderRepository.findByIdOrThrow(userId);
+    public User findByIdOruUserNotFoundThrow(Long userId) {
+        return userReaderRepository.findByIdOruUserNotFoundThrow(userId);
     }
 
     @Transactional
     public User addPoint(Long userId, PointCommand.ChargePoint charge) {
-        User target = userReaderRepository.findByIdOrThrow(userId);
+        User target = userReaderRepository.findByIdOruUserNotFoundThrow(userId);
         target.addPoint(charge.chargeAmount());
         return target;
     }
-
-
 }
