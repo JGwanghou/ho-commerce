@@ -1,6 +1,7 @@
 package com.gwangho.commerce.app.domain.user;
 
 import com.gwangho.commerce.app.common.BaseEntity;
+import com.gwangho.commerce.app.common.exception.InsufficientBalanceException;
 import com.gwangho.commerce.app.common.exception.InvalidChargeAmountException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -44,6 +45,20 @@ public class User extends BaseEntity {
         }
 
         this.point = this.point.add(amount);
+        return this;
+    }
+
+    public User decreasePoint(BigDecimal amount){
+        if (this.point.compareTo(amount) < 0)
+        {
+            throw new InsufficientBalanceException();
+        }
+
+        if (amount.compareTo(BigDecimal.ZERO) <= 0){
+            throw new InvalidChargeAmountException();
+        }
+
+        this.point = this.point.subtract(amount);
         return this;
     }
 }
