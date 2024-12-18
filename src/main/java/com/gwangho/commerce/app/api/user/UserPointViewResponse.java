@@ -1,4 +1,4 @@
-package com.gwangho.commerce.app.api.point;
+package com.gwangho.commerce.app.api.user;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @NoArgsConstructor
 @Getter
-public class PointViewResponse {
+public class UserPointViewResponse {
     String idempotencyKey;
     Long userId;
     String name;
@@ -16,7 +16,7 @@ public class PointViewResponse {
     BigDecimal chargeAmount;
 
     @Builder
-    public PointViewResponse(String idempotencyKey, Long userId, String name, String hpNo, BigDecimal chargeAmount) {
+    public UserPointViewResponse(String idempotencyKey, Long userId, String name, String hpNo, BigDecimal chargeAmount) {
         this.idempotencyKey = idempotencyKey;
         this.userId = userId;
         this.name = name;

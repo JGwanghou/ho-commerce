@@ -1,4 +1,4 @@
-package com.gwangho.commerce.app.api.point;
+package com.gwangho.commerce.app.api.user;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PointChargeRequest {
+public class UserPointChargeRequest {
 
     private Long userId;
     private String name;
@@ -20,7 +20,7 @@ public class PointChargeRequest {
     @DecimalMax(value = "1000000", message = "최대 충전 금액은 1,000,000원입니다.")
     private BigDecimal chargeAmount;
 
-    public PointChargeRequest(Long userId, BigDecimal chargeAmount) {
+    public UserPointChargeRequest(Long userId, BigDecimal chargeAmount) {
         this.chargeAmount = chargeAmount;
     }
 }

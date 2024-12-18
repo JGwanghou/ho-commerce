@@ -4,12 +4,17 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import com.gwangho.commerce.app.domain.user.User;
+import com.gwangho.commerce.app.domain.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,14 +23,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Optional;
 
 @Controller
+@RequiredArgsConstructor
 public class ViewController {
+    private final UserService userService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/index")
     public String index() {
         return "redirect:/"; // 루트 경로로 리다이렉트
+    }
+
+    @GetMapping("/index2")
+    public String index2(Model model) {
+        Optional<User> user = userService.findById(999L);
+
+        model.addAttribute("user", user);
+        return "page.html"; // 루트 경로로 리다이렉트
     }
 
     @GetMapping("/success")

@@ -8,11 +8,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserReaderRepository userReaderRepository;
     private final UserStoreRepository userStoreRepository;
+
+    public Optional<User> findById(Long userId) {
+        return userReaderRepository.findById(userId);
+    }
 
     public User findByIdOruUserNotFoundThrow(Long userId) {
         return userReaderRepository.findByIdOruUserNotFoundThrow(userId);

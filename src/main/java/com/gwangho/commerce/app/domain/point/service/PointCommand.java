@@ -8,4 +8,9 @@ public class PointCommand {
             BigDecimal chargeAmount
     ) {
     }
+
+    public record UsePoint(
+            BigDecimal chargeAmount
+    ) {
+    }
 }

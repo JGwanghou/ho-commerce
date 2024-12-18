@@ -1,10 +1,8 @@
-package com.gwangho.commerce.app.api.point;
+package com.gwangho.commerce.app.api.user;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class PointControllerTest {
+class UserControllerTest {
 
     @Test
     void getUserPoint() {
