@@ -1,5 +1,8 @@
 package com.gwangho.commerce.app.domain.order.infrastructure;
 
-//public interface OrderJpaRepository extends JpaRepository<, Long> {
-//
-//}
+import com.gwangho.commerce.app.domain.order.Order;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OrderJpaRepository extends JpaRepository<Order, Long> {
+
+}
