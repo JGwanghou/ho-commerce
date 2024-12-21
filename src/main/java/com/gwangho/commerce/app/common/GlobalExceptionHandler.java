@@ -73,4 +73,17 @@ class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(errorCode.getCode(), errorCode.getMessage()));
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleStockProductNotFoundException(StockNotFoundException e) {
+        log.error("Stock Product Not Found: {}", e.getMessage());
+        ErrorCode errorCode = e.getErrorCode();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(errorCode.getCode(), errorCode.getMessage()));
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        return ResponseEntity.status(500).body(new ErrorResponse("500", "에러가 발생했습니다."));
+    }
 }

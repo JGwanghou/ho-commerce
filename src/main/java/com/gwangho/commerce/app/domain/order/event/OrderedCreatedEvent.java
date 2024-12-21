@@ -7,11 +7,11 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class OrderCreatedEvent {
+public class OrderedCreatedEvent {
     private Order order;
     private List<OrderItem> orderItems;
 
-    public OrderCreatedEvent(Order order, List<OrderItem> orderItems) {
+    public OrderedCreatedEvent(Order order, List<OrderItem> orderItems) {
         this.order = order;
         this.orderItems = orderItems;
     }

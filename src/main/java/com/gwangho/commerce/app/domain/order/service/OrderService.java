@@ -1,30 +1,33 @@
 package com.gwangho.commerce.app.domain.order.service;
 
-import com.gwangho.commerce.app.domain.order.event.OrderCreatedEvent;
+import com.gwangho.commerce.app.domain.order.event.OrderedCreatedEvent;
 import com.gwangho.commerce.app.domain.order.Order;
 import com.gwangho.commerce.app.domain.order.OrderItem;
 import com.gwangho.commerce.app.domain.order.enums.OrderStatus;
-import com.gwangho.commerce.app.domain.order.event.OrderEventPublisher;
+import com.gwangho.commerce.app.domain.order.event.OrderedEventPublisher;
 import com.gwangho.commerce.app.domain.order.repository.OrderItemReaderRepository;
 import com.gwangho.commerce.app.domain.order.repository.OrderItemStoreRepository;
 import com.gwangho.commerce.app.domain.order.repository.OrderReaderRepository;
 import com.gwangho.commerce.app.domain.order.repository.OrderStoreRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
     private final OrderReaderRepository orderReaderRepository;
     private final OrderStoreRepository orderStoreRepository;
 
     private final OrderItemReaderRepository orderItemReaderRepository;
     private final OrderItemStoreRepository orderItemStoreRepository;
-    private final OrderEventPublisher orderEventPublisher;
+    private final OrderedEventPublisher orderEventPublisher;
 
+    @Transactional
     public Long order(OrderCommand.CreateOrder command) {
         // order
         Order order = Order.builder()
@@ -45,7 +48,9 @@ public class OrderService {
                 .toList();
         orderItemStoreRepository.saveAll(orderItems);
 
-        orderEventPublisher.success(new OrderCreatedEvent(order, orderItems));
+        log.info("----- 주문 ID: {}, 주문서 저장 이벤트 발행 start -----", order.getId());
+        orderEventPublisher.success(new OrderedCreatedEvent(order, orderItems));
+        log.info("----- 주문 ID: {}, 주문서 저장 이벤트 발행 end -----", order.getId());
         return order.getId();
     }
 }
