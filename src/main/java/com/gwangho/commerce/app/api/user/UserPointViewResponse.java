@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 @NoArgsConstructor
 @Getter
@@ -13,7 +14,7 @@ public class UserPointViewResponse {
     Long userId;
     String name;
     String hpNo;
-    BigDecimal chargeAmount;
+    String chargeAmount;
 
     @Builder
     public UserPointViewResponse(String idempotencyKey, Long userId, String name, String hpNo, BigDecimal chargeAmount) {
@@ -21,6 +22,6 @@ public class UserPointViewResponse {
         this.userId = userId;
         this.name = name;
         this.hpNo = hpNo;
-        this.chargeAmount = chargeAmount;
+        this.chargeAmount = new DecimalFormat("#,###").format(chargeAmount);
     }
 }

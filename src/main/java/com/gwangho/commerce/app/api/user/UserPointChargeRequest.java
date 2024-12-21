@@ -12,15 +12,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class UserPointChargeRequest {
 
-    private Long userId;
-    private String name;
-    private String hpNo;
-
     @DecimalMin(value = "1000", message = "최소 충전 금액은 1,000원입니다.")
     @DecimalMax(value = "1000000", message = "최대 충전 금액은 1,000,000원입니다.")
     private BigDecimal chargeAmount;
 
-    public UserPointChargeRequest(Long userId, BigDecimal chargeAmount) {
+    public UserPointChargeRequest(BigDecimal chargeAmount) {
         this.chargeAmount = chargeAmount;
     }
 }

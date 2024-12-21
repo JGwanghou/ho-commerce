@@ -22,7 +22,7 @@ public class User extends BaseEntity {
 
     private String name;
 
-    @Column(precision = 7, scale = 1, nullable = false)
+    @Column(precision = 10, scale = 1, nullable = false)
     private BigDecimal point = BigDecimal.ZERO;
 
     private String hpNo;

@@ -14,6 +14,7 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "point")
 public class Point extends BaseEntity {
 
     @Id
@@ -25,7 +26,7 @@ public class Point extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PointType type;
 
-    @Column(precision = 7, scale = 1, nullable = false)
+    @Column(precision = 10, scale = 1, nullable = false)
     private BigDecimal amount;
 
     @Builder

@@ -38,9 +38,6 @@ public class ViewController {
 
     @GetMapping("/index2")
     public String index2(Model model) {
-        Optional<User> user = userService.findById(999L);
-
-        model.addAttribute("user", user);
         return "page.html"; // 루트 경로로 리다이렉트
     }
 
