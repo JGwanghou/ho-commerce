@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: _3weeks
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+      format_sql: true
+      enable_lazy_load_no_trans: true
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 1000
+        order_inserts: true
+        order_updates: true
+  profiles:
+    active: local
+
+server:
+  port: 8080
