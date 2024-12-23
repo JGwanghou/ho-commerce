@@ -1,4 +1,4 @@
-package com.gwangho.commerce.app.infra;
+package com.gwangho.commerce.app.infra.lock;
 
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;

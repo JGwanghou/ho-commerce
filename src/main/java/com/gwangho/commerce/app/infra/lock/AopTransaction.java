@@ -1,4 +1,4 @@
-package com.gwangho.commerce.app.infra;
+package com.gwangho.commerce.app.infra.lock;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;

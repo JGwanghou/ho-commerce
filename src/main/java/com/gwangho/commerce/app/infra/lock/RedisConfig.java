@@ -1,4 +1,4 @@
-package com.gwangho.commerce.app.infra;
+package com.gwangho.commerce.app.infra.lock;
 
 
 import org.redisson.Redisson;

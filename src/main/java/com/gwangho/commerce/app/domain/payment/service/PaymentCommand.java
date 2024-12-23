@@ -10,7 +10,7 @@ public class PointCommand {
     }
 
     public record UsePoint(
-            BigDecimal chargeAmount
+            BigDecimal useAmount
     ) {
     }
 }
