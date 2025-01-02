@@ -3,11 +3,9 @@ package com.gwangho.commerce.app.domain.user.service;
 import com.gwangho.commerce.app.annotation.AcceptanceTest;
 import com.gwangho.commerce.app.common.exception.InsufficientBalanceException;
 import com.gwangho.commerce.app.common.exception.UserNotFoundException;
-import com.gwangho.commerce.app.domain.point.service.PointService;
 import com.gwangho.commerce.app.domain.user.User;
 import com.gwangho.commerce.app.domain.user.repository.UserStoreRepository;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -17,6 +15,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @AcceptanceTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserServiceTest {
 
     @Autowired
@@ -27,6 +26,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("유저 조회")
+    @Order(1)
     void 유저조회() {
         User user = 유저생성();
 
@@ -40,6 +40,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("유저 조회 예외 발생")
+    @Order(2)
     void 유저조회_예외() {
         Long userId = 1L;
 

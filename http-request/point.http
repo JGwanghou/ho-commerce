@@ -5,8 +5,8 @@ GET {{root-path}}/api/v1/users/1
 ### POST 포인트 충전
 POST {{root-path}}/api/v1/users/1/charge
 Content-Type: application/json
-Idempotency-Key: 2024121718210034623
+Idempotency-Key: 22346455243233
 
 {
-  "chargeAmount": "1000.0"
+  "chargeAmount": "100000.0"
 }

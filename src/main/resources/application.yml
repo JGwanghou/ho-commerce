@@ -4,7 +4,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
       format_sql: true
       enable_lazy_load_no_trans: true
     properties:

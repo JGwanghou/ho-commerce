@@ -7,11 +7,11 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class DecreasedSucceedEvent {
+public class DecreasedFailedEvent {
     private Order order;
     private List<OrderItem> orderItems;
 
-    public DecreasedSucceedEvent(Order order, List<OrderItem> orderItems) {
+    public DecreasedFailedEvent(Order order, List<OrderItem> orderItems) {
         this.order = order;
         this.orderItems = orderItems;
     }

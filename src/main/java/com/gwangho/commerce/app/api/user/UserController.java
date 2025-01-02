@@ -1,7 +1,7 @@
 package com.gwangho.commerce.app.api.user;
 
 import com.gwangho.commerce.app.application.UserFacade;
-import com.gwangho.commerce.app.domain.point.service.PointCommand;
+import com.gwangho.commerce.app.domain.payment.service.PaymentCommand;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class UserController {
             @PathVariable Long userId,
             @RequestBody @Valid UserPointChargeRequest charge
     ) throws Exception {
-        UserPointViewResponse response = userFacade.charge(idempotencyKey, userId, new PointCommand.ChargePoint(charge.getChargeAmount()));
+        UserPointViewResponse response = userFacade.charge(idempotencyKey, userId, new PaymentCommand.ChargePoint(charge.getChargeAmount()));
 
         return ResponseEntity.ok()
                 .body(response);

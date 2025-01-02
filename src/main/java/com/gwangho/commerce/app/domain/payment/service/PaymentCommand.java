@@ -1,8 +1,12 @@
-package com.gwangho.commerce.app.domain.point.service;
+package com.gwangho.commerce.app.domain.payment.service;
+
+import com.gwangho.commerce.app.domain.order.Order;
+import com.gwangho.commerce.app.domain.order.OrderItem;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-public class PointCommand {
+public class PaymentCommand {
 
     public record ChargePoint(
             BigDecimal chargeAmount
@@ -10,7 +14,8 @@ public class PointCommand {
     }
 
     public record UsePoint(
-            BigDecimal useAmount
+            Order order,
+            List<OrderItem> orderItemList
     ) {
     }
 }

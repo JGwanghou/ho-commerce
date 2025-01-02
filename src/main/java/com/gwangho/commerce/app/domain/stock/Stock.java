@@ -3,10 +3,7 @@ package com.gwangho.commerce.app.domain.stock;
 import com.gwangho.commerce.app.common.BaseEntity;
 import com.gwangho.commerce.app.common.exception.OutOfStockException;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -23,6 +20,12 @@ public class Stock extends BaseEntity {
     private Long productId;
 
     private Long quantity;
+
+    @Builder
+    public Stock(Long productId, Long quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
 
     public Stock decrease(Long quantity) {
         validDecrease(quantity);

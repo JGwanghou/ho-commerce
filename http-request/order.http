@@ -1,0 +1,18 @@
+### POST 상품 주문
+POST {{root-path}}/api/v1/orders
+Content-Type: application/json
+
+{
+  "userId": 4,
+  "orderCreateItems": [
+    {
+      "productId": 1,
+      "count": 3
+    },
+    {
+      "productId": 3,
+      "count": 3
+    }
+  ],
+  "paymentAmount": 10000000
+}

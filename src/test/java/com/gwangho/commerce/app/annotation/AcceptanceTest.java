@@ -10,7 +10,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Retention(RetentionPolicy.RUNTIME)
-@Transactional
 @ActiveProfiles("test")
 @TestExecutionListeners(value = {AcceptanceTestExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public @interface AcceptanceTest {

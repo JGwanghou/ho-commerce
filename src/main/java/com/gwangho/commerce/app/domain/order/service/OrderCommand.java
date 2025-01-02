@@ -13,7 +13,8 @@ public class OrderCommand {
 
     public record CreateOrderItem(
             Long productId,
-            Long count
+            Long count,
+            BigDecimal amount
     ) {
     }
 
