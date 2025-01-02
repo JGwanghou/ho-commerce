@@ -6,14 +6,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PaymentEventPublisher {
+public class UsePointEventPublisher {
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public void success(PaymentSucceedEvent event) {
+    public void success(UsePointSucceedEvent event) {
         applicationEventPublisher.publishEvent(event);
     }
 
-    public void fail(PaymentFailedEvent event) {
+    public void fail(UsePointFailedEvent event) {
         applicationEventPublisher.publishEvent(event);
     }
 }

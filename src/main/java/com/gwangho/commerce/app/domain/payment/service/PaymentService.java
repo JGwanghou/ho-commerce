@@ -16,6 +16,7 @@ public class PaymentService {
 
     public Payment chargeHistoryInsert(Long userId, PaymentCommand.ChargePoint charge) throws Exception {
         Payment payment = Payment.builder()
+                .user_id(userId)
                 .payMethod(PaymentType.CASH)
                 .totalPrice(charge.chargeAmount())
                 .build();

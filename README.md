@@ -382,8 +382,248 @@
 ## ⚙️ **Architecture**
 ![img_1.png](docs/images/architecture.png)
 
+## ✅ 문제 해결 및 학습내용
+<details>
+  <summary>동시성 이슈</summary>
 
-### 6. [동시성 보고서](https://github.com/JGwanghou/hhplus-ecommerce/blob/main/docs/06_Concurrently.md)
+## 재고 감소 문제에 따른 분석
 
-### 7. [Index 개선 시도](https://kh-well.tistory.com/76)
+### 재고 감소 비즈니스 로직
+```java
+@Transactional
+public void decreaseStock(List<OrderProductsRequest> req) {
+    for (OrderProductsRequest orderRequest : req) {
+        // 락 사용하지 않은 일반적인 상품정보 읽기
+        ProductStockEntity productStock = productStockRepository.findById(orderRequest.getProduct_id());
+        productStock.decreaseStock(orderRequest.getProduct_id(), (long) orderRequest.getProduct_quantity());
+    }
+}
+```
+
+### 동시성 테스트코드
+```java
+/*
+    재고 갯수가 100개인 상품에 100번의 주문을 시도합니다.
+ */
+int threadCount = 100;
+ExecutorService executorService = Executors.newFixedThreadPool(32);
+CountDownLatch latch = new CountDownLatch(threadCount);
+
+for(int i=0; i<threadCount; i++){
+    executorService.submit(() -> {
+        try {
+        productService.decreaseStock(req);
+        } finally {
+            latch.countDown();
+        }
+    });
+}
+
+latch.await();
+
+assertEquals(0, product.getStock());
+```
+해당 메서드를 병렬적으로 100번 수행 후 0개가 남길 기대하지만, 테스트에 실패하게 됩니다.
+
+### 왜 실패하는가?
+
+```mermaid
+sequenceDiagram
+    participant User1 as 사용자 1
+    participant DB as 재고 데이터베이스
+    participant User2 as 사용자 2
+
+    Note over DB: 초기 재고: 100개
+
+    User1->>DB: 재고 조회 (100개)
+    
+    User2->>DB: 재고 조회 (100개)
+    User2->>DB: 주문 (1개 차감)
+    User2->>DB: 저장 (99개)
+
+    User1->>DB: 주문 (1개 차감)
+    User1->>DB: 저장 (99개)
+```
+- 다른 사용자와 `동시에 같은 개수`로 읽게 되었을 때, <b>사용자2</b>가 주문했음에도 불구하고 <b>사용자1</b>은 아무런 영향을 받지않고 있습니다. 이처럼, <b>두 개 이상의 쓰레드가 공유데이터에 접근하여 동시에 변경</b>하려는 문제를 <b>레이스 컨디션(Race Condition)</b> 문제라고 합니다.
+- 분석 결과, 현재 사용자 두 명 이상이 A라는 상품을 주문하게 될 시 레이스 컨디션 문제가 발생합니다.
+
+### 어떻게 해결할 것인가?
+우리는 <b>공유자원</b>에 접근한다는 기준, `사용자 2`가 주문할 시 `사용자 1`쓰레드에도 재고수량 동기화가 필요합니다.
+
+### 동기화 방법
+
+### 1. synchronized
+
+전통적인 동기화 방식입니다. 메서드나 메서드 내 임계구역을 설정하여 <b>하나의 쓰레드만 접근 가능</b>하며, 해당 쓰레드만이 임계구역 해제하여 동기화를 보장합니다. 하지만, 한 개의 프로세스 안에서만 보장되며 서버가 여러 대일 때는 데이터에 여러 대의 프로세스가 접근 가능하여 레이스 컨디션 문제가 발생합니다.
+
+### 2. DB Lock
+
+synchronized은 애플리케이션 코드에서 임계구역을 설정했다면, 해당 방법은 우리의 외부DB에 임계구역을 설정하여 여러 대의 서버 상황에서도 동기화를 보장할 수 있습니다.
+낙관적 락/비관적 락이 존재하며, 다음과 같은 특징이 있습니다.
+
+- 낙관적 락:
+  DB에 Lock을 걸지 않고 읽기 시점/쓰기 시점의 데이터 변경 여부에 따라
+  동시성을 제어하는 방식이라 성능이 비관적 락보다 상대적으로 높습니다.
+  트랜잭션 간 충돌이 많아질 경우 retry 빈도 증가하게 되며 DB Connection, 스레드 점유 등의 단점이 존재합니다.
+
+
+- 비관적 락:
+  테이블 또는 행에 Lock을 설정(x-lock) 하나의 트랜잭션만 작업이 가능하여 일관성을 확보하지만 해당 작업이 끝날때 까지 다른 트랜잭션은 대기 상태입니다.
+  트래픽이 몰리는 경우 락 대기시간으로 latency가 증가할 수 있습니다.
+
+### 3. 분산 락
+DB Lock은 데이터 정합성 보장에 효과적이지만, 높은 동시성이 요구되는 경우(대규모) 병목 현상으로 성능이 저하될 수 있습니다. 이에 `중대규모 프로젝트시 분산락`을 고려할 수도 있습니다. 빠른 성능을 위해 Redis 를 사용했으며, 자바에서 사용할 수 있는 클라이언트는 크게 Jedis, Lettuce, Redisson 3가지 입니다.
+#### Lettuce
+- Netty 기반의 Redis Client로 넌블로킹 I/O로 구현되어 비동기 방식으로 처리, 고성능
+- SETNX를 이용하여 Spin Lock 형태를 구현
+- 경쟁 스레드들이 지속적으로 요청을 보내기 때문에 서버 부하가 심하다
+- 개발자가 직접 retry, timeout 구현해야하며 지속적인 재시도로 네트워크 비용과 스레드 점유등의 문제가 발생
+
+#### Redisson
+- 네트워크 트래픽 또는 CPU 사용량을 줄이기 위해 Lua 스크립트를 활용합니다.
+- 재시도 로직을 내장하고 있어 락 흭득을 위한 별도의 재시도 로직을 작성하지 않아도 됩니다.
+- 동시에 락 흭득 요청 시 FIFO 형태로 요청 순서를 보장합니다.
+
+## 재고 감소 문제해결 및 성능비교
+
+DB Lock과 분산 락을 이용하여 문제 해결을 진행하겠습니다
+- 상품 `PRODUCT` 테이블
+- 상품재고 `PRODUCT_STOCK` 테이블
+- 테스트 조건: 재고 100개인 상품에 100번 동시 차감시도
+
+### DB Lock(비관적 락 설정)
+
+```java
+// 상품재고 테이블 락
+@Lock(LockModeType.PESSIMISTIC_WRITE)
+ProductStockEntity findByProductIdWithPessimisticLock(@Param("productId") Long productId);
+```
+### 실행결과 : 테스트 통과, 실행시간 348ms
+![img_1.png](docs/images/con_img_1.png)
+
+### 분산 락(Redis-Lettuce)
+```java
+// 구현코드
+public class OrderUseCase {
+    // ..
+    
+    public Long order(OrderRequest request) {
+        for (OrderProductsRequest prod : request.getProducts()) {
+            
+            while(!redisLockRepository.lock(prod.getProduct_id())){
+                try{
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    throw new RuntimeException(e);
+                }
+            }
+
+            try{
+                productService.decreaseStock(prod.getProduct_id(), (long) prod.getProduct_quantity());
+            }finally {
+                redisLockRepository.unlock(prod.getProduct_id());
+            }
+        }
+        
+        // ...
+    }
+}
+```
+### 실행결과 : 테스트 통과, 실행시간 17660ms
+![img_2.png](docs/images/con_img_2.png)
+
+### 분산 락(Redis-Redisson)
+```java
+@Configuration
+public class RedissonConfig {
+    // redisHost..
+  
+    @Bean
+    public RedissonClient redissonClient() {
+        RedissonClient redisson = null;
+        Config config = new Config();
+        config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + redisHost + ":" + redisPort);
+        redisson = Redisson.create(config);
+        return redisson;
+    }
+}
+
+public class OrderUseCase {
+    // ..
+    
+    public Long order(OrderRequest request) {
+        for (OrderProductsRequest prod : request.getProducts()) {
+            RLock rLock = redissonClient.getLock(String.format("LOCK:PROD-%d", prod.getProduct_id()));
+
+            try {
+                boolean available = rLock.tryLock(10, 1, TimeUnit.SECONDS);
+                if(!available) {
+                    throw new IllegalArgumentException("Lock Not acquired");
+                }
+                productService.decreaseStock(prod.getProduct_id(), (long) prod.getProduct_quantity());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                rLock.unlock();
+            }
+        }
+        
+        // ...
+    }
+}
+```
+### 실행결과 : 테스트 통과, 실행시간 673ms
+![img_3.png](docs/images/con_img_3.png)
+
+### 결과
+비관적 락, Lettuce 락, Redisson 락을 사용하여 상품 재고에 대한 정합성을 확보했습니다.
+또한, 방식에 따라 성능지표를 확인하며 락 특징들에 대한 이해를 쌓았습니다. 
+
+### 💹 (추가) 분산 락 특징 및 유의할 점
+## 🌟 Best practice
+- 분산 락 구현시 트랜잭션은 데이터의 무결성을 보장하기 위해 `"락 흭득을 우선"`
+![img_4.png](docs/images/con_img_4.png)
+![img_5.png](docs/images/con_img_5.png)<br/>
+- `@Transactional`이 존재하는 decreaseStock 메서드 경우 메서드 시작 전에 프록시 객체가 생성되어 tx.begin()을 시작해버리기 때문에 외부에서 락을 잡아놓고 진행되어야합니다.
+- 해당 사항을 고려하여 OrderUsecase에서 먼저 상품 번호에 대한 Lock 흭득 후 decreasStock 메서드가 수행되도록 진행 했습니다.
+- 이를 위반한 경우 아래 예제에 내용을 포함했습니다.
+## ☔ Bad practice
+
+### <b>1. 트랜잭션이 먼저 시작되고 락을 획득 하는경우</b>
+![img_7.png](docs/images/img_7.png)
+- 락을 먼저 흭득하지 않고 tx.begin()를 하게 되는 경우 A라는 상품에 대해 사용자1, 사용자2가 동시에 읽어버리게 됩니다.
+- 읽은 데이터로, 값을 수정하기 때문에 `분실 갱신(Lost Update)`이 발생하며 사용자1 또는 사용자2의 행동이 무효화됩니다.
+- 해결할 수 있는 방법은 commit시 version 확인을 통해 값을 비교할 수 있는 낙관적 락으로 생각됩니다.
+
+### <b>2. 트랜잭션 커밋 전 락이 해제되는 경우</b>
+![img_6.png](docs/images/con_img_6.png)
+- 실무에서 가장 많이 발생하는 실수라고 들었던 것 같습니다.
+- 핵심 포인트는 `수정 사항을 커밋 이후 락 해제!` 
+</details>
+
+<details>
+  <summary>멱등성</summary>
+  <div> > 첫 번째 수행을 한 뒤 여러 차례 적용해도 결과를 변경시키지 않는 작업 또는 기능의 속성</div>
+
+포인트 충전 시 더블클릭/네트워크 오류로 인한 중복된 리소스가 생성되지 않도록 했습니다.(공짜돈 방지)
+
+## 1. 구현 
+
+### 1-1. 인터셉터
+```text
+기능 개발에 앞서 어느 계층에 적용하는 것이 적합한 것인가에 대해 고민했습니다.
+
+1. 서비스
+2. 컨트롤러
+3. 인터셉터
+```
+인터셉터를 선정했습니다.
+- `동일한 요청에 대해 컨트롤러와 도메인 로직이 실행 되는 것을 방지`하고자였습니다.
+- 또한, `예외처리 때문에 스프링 컨테이너로 관리되는 인터셉터에서 진행`했습니다. 
+
+### 1-2. 구현 코드
+1. 반복요청 통과
+2. 인터셉터부터 
+</details>
+
 

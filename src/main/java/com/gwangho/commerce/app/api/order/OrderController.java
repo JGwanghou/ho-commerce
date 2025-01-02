@@ -29,8 +29,7 @@ public class OrderController {
                 userId,
                 request.getOrderCreateItems().stream()
                         .map(item -> new OrderCommand.CreateOrderItem(item.getProductId(), item.getCount(), BigDecimal.ZERO))
-                        .toList(),
-                request.getPaymentAmount()
+                        .toList()
         );
 
         OrderResponse order = orderFacade.createOrder(createOrder);

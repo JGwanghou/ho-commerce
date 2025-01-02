@@ -1,10 +1,9 @@
 package com.gwangho.commerce.app.domain.payment.event;
 
-import com.gwangho.commerce.app.domain.user.event.PaymentFailedEvent;
-import com.gwangho.commerce.app.domain.user.event.PaymentSucceedEvent;
+import com.gwangho.commerce.app.domain.user.event.UsePointFailedEvent;
+import com.gwangho.commerce.app.domain.user.event.UsePointSucceedEvent;
 import com.gwangho.commerce.app.infra.platform.OrderAfterDataPlatForm;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,11 +11,11 @@ import org.springframework.stereotype.Component;
 public class PaymentSucceedEventPublisher {
     private OrderAfterDataPlatForm orderAfterDataPlatForm;
 //    https://hooks.slack.com/services/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
-    public void success(PaymentSucceedEvent event) {
+    public void success(UsePointSucceedEvent event) {
         orderAfterDataPlatForm.slackAlarm(event.getOrder());
     }
 
-    public void fail(PaymentFailedEvent event) {
+    public void fail(UsePointFailedEvent event) {
 
     }
 

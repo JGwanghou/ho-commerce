@@ -19,6 +19,7 @@ public class Payment {
     private Long id;
 
     private Long order_id;
+    private Long user_id;
     private BigDecimal totalPrice = BigDecimal.ZERO;
 
     @Enumerated(EnumType.STRING)
@@ -27,9 +28,10 @@ public class Payment {
     private String status;
 
     @Builder
-    public Payment(Long order_id, BigDecimal totalPrice, PaymentType payMethod) {
+    public Payment(Long order_id, BigDecimal totalPrice, Long user_id, PaymentType payMethod) {
         this.order_id = order_id;
         this.totalPrice = totalPrice;
+        this.user_id = user_id;
         this.payMethod = payMethod;
         this.status = order_id == null ? "충전" : "사용";
     }

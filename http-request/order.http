@@ -3,7 +3,7 @@ POST {{root-path}}/api/v1/orders
 Content-Type: application/json
 
 {
-  "userId": 4,
+  "userId": 3,
   "orderCreateItems": [
     {
       "productId": 1,
@@ -13,6 +13,5 @@ Content-Type: application/json
       "productId": 3,
       "count": 3
     }
-  ],
-  "paymentAmount": 10000000
+  ]
 }

@@ -11,6 +11,8 @@ import com.gwangho.commerce.app.infra.lock.RedisLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 
@@ -27,7 +29,10 @@ public class StockService {
         stock.decrease(orderItem.getCount());
     }
 
+    @Transactional
     public void successDecrease(Order order, List<OrderItem> orderItem) {
+        log.info("Transaction 상태: {}", TransactionSynchronizationManager.isActualTransactionActive());
+
         eventPublisher.success(new DecreasedSucceedEvent(order,orderItem));
     }
 

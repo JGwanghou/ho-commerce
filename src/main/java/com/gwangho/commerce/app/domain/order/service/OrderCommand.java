@@ -6,8 +6,7 @@ import java.util.List;
 public class OrderCommand {
     public record CreateOrder(
             Long userId,
-            List<CreateOrderItem> createOrderItems,
-            BigDecimal paymentAmount
+            List<CreateOrderItem> createOrderItems
     ) {
     }
 

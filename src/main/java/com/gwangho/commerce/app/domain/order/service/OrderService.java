@@ -43,10 +43,6 @@ public class OrderService {
 
         BigDecimal totalPrice = calcTotalPrice(command, productActualInfo);
 
-        // orderItem 의 상품번호를 기준으로 개수 가격 계산
-
-
-
         Order order = Order.builder()
                 .userId(command.userId())
                 .totalPrice(totalPrice)
@@ -58,6 +54,7 @@ public class OrderService {
                 .map(item -> OrderItem.builder()
                         .orderId(orderInfo.getId())
                         .productId(item.productId())
+                        .orderPrice(BigDecimal.valueOf(2000))
                         .count(item.count())
                         .build())
                 .toList();

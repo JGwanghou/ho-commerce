@@ -14,5 +14,4 @@ import java.util.List;
 public class OrderRequest {
     @NotNull private Long userId;
     @NotNull private List<OrderCreateItem> orderCreateItems;
-    @NotNull private BigDecimal paymentAmount;
 }

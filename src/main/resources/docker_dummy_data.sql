@@ -1,6 +1,6 @@
 create table orders (is_delete BOOLEAN DEFAULT false, total_price decimal(38,2), create_at datetime(6), id bigint not null auto_increment, update_at datetime(6), user_id bigint, status enum ('CANCELED','FAIL','PAID','PAY_FAILED','READY'), primary key (id)) engine=InnoDB;
 create table orders_item (is_delete BOOLEAN DEFAULT false, order_price decimal(38,2), count bigint, create_at datetime(6), id bigint not null auto_increment, order_id bigint, product_id bigint, update_at datetime(6), primary key (id)) engine=InnoDB;
-create table payment (total_price decimal(38,2), id bigint not null auto_increment, order_id bigint, status varchar(255), pay_method enum ('CARD','CASH','QR_PAY','TRANSFER'), primary key (id)) engine=InnoDB;
+create table payment (total_price decimal(38,2), id bigint not null auto_increment, order_id bigint, user_id bigint, status varchar(255), pay_method enum ('CARD','CASH','QR_PAY','TRANSFER'), primary key (id)) engine=InnoDB;
 create table product (is_delete BOOLEAN DEFAULT false, price decimal(38,2), create_at datetime(6), id bigint not null auto_increment, update_at datetime(6), name varchar(255), primary key (id)) engine=InnoDB;
 create table stock (is_delete BOOLEAN DEFAULT false, create_at datetime(6), id bigint not null auto_increment, product_id bigint, quantity bigint, update_at datetime(6), primary key (id)) engine=InnoDB;
 create table users (is_delete BOOLEAN DEFAULT false, point decimal(10,1) not null, create_at datetime(6), id bigint not null auto_increment, update_at datetime(6), hp_no varchar(255), name varchar(255), primary key (id)) engine=InnoDB;
@@ -17,7 +17,7 @@ WITH RECURSIVE cte (n) AS
 )
 SELECT
     CONCAT('Product-', LPAD(n, 7, '0')) AS name,
-    FLOOR(1 + RAND() * 1000) AS price,
+    2000 AS price,
     FALSE as is_delete,
     TIMESTAMP(DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 3650) DAY) + INTERVAL FLOOR(RAND() * 86400) SECOND) AS create_at,
     TIMESTAMP(DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 3650) DAY) + INTERVAL FLOOR(RAND() * 86400) SECOND) AS update_at
@@ -27,7 +27,7 @@ FROM cte;
 INSERT INTO stock (product_id, quantity, create_at, update_at)
 SELECT
     p.id AS product_id,
-    10 as quantity,
+    50 as quantity,
     TIMESTAMP(DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 3650) DAY) + INTERVAL FLOOR(RAND() * 86400) SECOND) AS create_at,
     TIMESTAMP(DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 3650) DAY) + INTERVAL FLOOR(RAND() * 86400) SECOND) AS update_at
 FROM product p;

@@ -7,6 +7,7 @@ import com.gwangho.commerce.app.domain.user.User;
 import com.gwangho.commerce.app.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class UserFacade {
                 .build();
     }
 
+    @Transactional
     public UserPointViewResponse charge(String idempotencyKey, Long userId, PaymentCommand.ChargePoint charge) throws Exception {
         User user = userService.addPoint(userId, charge); // 상태변경
         paymentService.chargeHistoryInsert(userId, charge);

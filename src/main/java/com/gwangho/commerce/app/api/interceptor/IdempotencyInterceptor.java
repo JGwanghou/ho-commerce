@@ -23,6 +23,7 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(HttpMethod.POST.matches(request.getMethod())){
+            Thread.sleep(500);
             String idempotencyKey = request.getHeader(IDEMPOTENCY_HEADER);
             if (idempotencyKey == null || idempotencyKey.isEmpty()) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "멱등성 키가 누락되었습니다.");
