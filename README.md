@@ -19,150 +19,150 @@
 <details>
   <summary>마일스톤</summary>
 
-  ## [3주차] 프로젝트 설계
-  |     | 작업 | 예상 시간 (시간) |
+## [3주차] 프로젝트 설계
+|     | 작업 | 예상 시간 (시간) |
   |-----|------|----------------|
-  | 1   | **프로젝트 설계** | **40** |
-  | 1.1 | 주차 별 마일스톤 설정 | 2 |
-  | 1.2 | 요구사항 분석 | 8 |
-  | 1.3 | 시퀀스 다이어그램 작성 | 8 |
-  | 1.4 | ERD 설계 | 8 |
-  | 1.5 | API 명세서 작성 | 8 |
-  | 1.6 | Mock API 구현 | 8 |
-  
-  ## [4주차] 프로젝트 API 구현(With TDD)
-  
-  |  | 작업                   | 예상 시간 (시간) |
+| 1   | **프로젝트 설계** | **40** |
+| 1.1 | 주차 별 마일스톤 설정 | 2 |
+| 1.2 | 요구사항 분석 | 8 |
+| 1.3 | 시퀀스 다이어그램 작성 | 8 |
+| 1.4 | ERD 설계 | 8 |
+| 1.5 | API 명세서 작성 | 8 |
+| 1.6 | Mock API 구현 | 8 |
+
+## [4주차] 프로젝트 API 구현(With TDD)
+
+|  | 작업                   | 예상 시간 (시간) |
   |--|----------------------|------------|
-  | 2 | **TDD로 프로젝트 API 구현** | **40**     |
-  | 2.1 | [주요] 잔액 충전 / 조회 API  | -          |
-  | 2.1.1 | 잔액 충전 API 개발         | 2          |
-  | 2.1.2 | 잔액 조회 API 개발         | 2          |
-  | 2.2 | [기본] 상품 조회 API       | -          |
-  | 2.2.1 | 상품 정보조회 API 개발       | 8          |
-  | 2.3 | [주요] 주문 / 결제 API     | -          |
-  | 2.3.1 | 주문 API 및 포인트 결제 개발   | 16         |
-  | 2.4 | [기본] 상품 조회 API       | -          |
-  | 2.4.1 | 판매량 최다 상품 조회         | 3          |
-  
-  ## [5주차] 고도화 및 코드 리팩토링
-  
-  |    | 작업 | 예상 시간 (시간) |
+| 2 | **TDD로 프로젝트 API 구현** | **40**     |
+| 2.1 | [주요] 잔액 충전 / 조회 API  | -          |
+| 2.1.1 | 잔액 충전 API 개발         | 2          |
+| 2.1.2 | 잔액 조회 API 개발         | 2          |
+| 2.2 | [기본] 상품 조회 API       | -          |
+| 2.2.1 | 상품 정보조회 API 개발       | 8          |
+| 2.3 | [주요] 주문 / 결제 API     | -          |
+| 2.3.1 | 주문 API 및 포인트 결제 개발   | 16         |
+| 2.4 | [기본] 상품 조회 API       | -          |
+| 2.4.1 | 판매량 최다 상품 조회         | 3          |
+
+## [5주차] 고도화 및 코드 리팩토링
+
+|    | 작업 | 예상 시간 (시간) |
   |----|------|------------|
-  | 3  | **고도화 및 코드 리팩토링** | **40**     |
-  | 3.1 | 고도화 | 20          |
-  | 3.2 | 동시성 이슈 검토 | 12         |
-  | 3.3 | 코드 리팩토링 | 8          |
+| 3  | **고도화 및 코드 리팩토링** | **40**     |
+| 3.1 | 고도화 | 20          |
+| 3.2 | 동시성 이슈 검토 | 12         |
+| 3.3 | 코드 리팩토링 | 8          |
 </details>
 
 <details>
   <summary>ERD</summary>
 
-  ![img_1.png](docs/images/new-erd.png)
+![img_1.png](docs/images/new-erd.png)
 </details>
 
 <details>
   <summary>시퀀스 다이어그램</summary>
 
-  ### 잔액 조회
+### 잔액 조회
   ```mermaid
-  sequenceDiagram 
-    autonumber
-    
-    actor Client
-    participant UserService
-    participant UserDB
-    Client->>UserService: GET /api/v1/users/{userId}
-    UserService->>UserDB: 사용자 조회
-    
-    opt 유저 존재하지 않는 경우
-        UserDB-->>UserService: UserNotFoundException
-        UserService-->>Client: 404 NOT FOUND
-    end
-    UserDB-->>UserService: 
+  sequenceDiagram
+  autonumber
+
+  actor Client
+  participant UserService
+  participant UserDB
+  Client->>UserService: GET /api/v1/users/{userId}
+  UserService->>UserDB: 사용자 조회
+
+  opt 유저 존재하지 않는 경우
+    UserDB-->>UserService: UserNotFoundException
+    UserService-->>Client: 404 NOT FOUND
+  end
+UserDB-->>UserService: 
     UserService-->>Client: 유저정보 반환
   ```
 
-  ### 상품 조회
-  ```mermaid
-  sequenceDiagram 
-    autonumber
-    
-    actor Client
-    participant ProductFacade
-    participant ProductService
-    participant StockService
-    Client->>ProductFacade: GET /api/v1/users/{userId}
-    
-    
-  ```
-
-  ### 잔액 충전
+### 상품 조회
   ```mermaid
   sequenceDiagram
-    autonumber
-    actor Client
-    participant UserService
-    participant UserDB
-    Client->>UserService: POST /api/v1/users/{userId}/charge
-    UserService->>UserDB: 사용자 조회
-    
-    opt 유저 존재하지 않는 경우
-        UserDB-->>UserService: UserNotFoundException
-        UserService-->>Client: 404 NOT FOUND
-    end
-    opt 충전금액: 0원 이하, 0원, 1,000,000원 이상
-      UserDB-->>UserService: InvalidChargeAmountException
-      UserService-->>Client: 400 BAD REQUEST
-    end
-    UserDB-->>UserService: 
+  autonumber
+
+  actor Client
+  participant ProductFacade
+  participant ProductService
+  participant StockService
+  Client->>ProductFacade: GET /api/v1/users/{userId}
+
+
+```
+
+### 잔액 충전
+  ```mermaid
+  sequenceDiagram
+  autonumber
+  actor Client
+  participant UserService
+  participant UserDB
+  Client->>UserService: POST /api/v1/users/{userId}/charge
+  UserService->>UserDB: 사용자 조회
+
+  opt 유저 존재하지 않는 경우
+    UserDB-->>UserService: UserNotFoundException
+    UserService-->>Client: 404 NOT FOUND
+  end
+  opt 충전금액: 0원 이하, 0원, 1,000,000원 이상
+    UserDB-->>UserService: InvalidChargeAmountException
+    UserService-->>Client: 400 BAD REQUEST
+  end
+UserDB-->>UserService: 
     UserService-->>Client: 유저정보 반환(충전 후 잔액) 
   ```
 
-  ### 주문 동작흐름
+### 주문 동작흐름
   ```mermaid
   sequenceDiagram
-      autonumber
-      actor Client
-      participant OrderAPI
-      participant StockService
-      participant UserService
-      participant PaymentService
-      participant Redisson
-      participant DB
-      participant MessageQueue
-      participant NotificationService
-      Client->>OrderAPI: POST /api/orders
-      Note over OrderAPI: 트랜잭션 시작
-      OrderAPI->>DB: 주문 정보 저장(status = '대기')
-      OrderAPI->>DB: 주문 상세정보 저장
-      Note over StockService: 트랜잭션 시작
-      loop
-          StockService->>Redisson: 상품번호 기준 락 흭득
-          StockService->>DB: 재고 조회
-          alt 재고개수 = 0
-              DB-->>StockService: 409 CONFLICT
-              StockService-->>Client: 409 CONFLICT
-          else 재고개수 > 0
-              Redisson->>DB: 재고차감
-          end
-      end
-      Note over StockService: 트랜잭션 종료
-      UserService->>PaymentService: 보유 포인트 조회
-      alt 보유포인트 < 주문금액
-          PaymentService-->>Client: 포인트부족 예외
-      else 보유포인트 >= 주문금액
-          UserService->>PaymentService: 보유 포인트 차감
-          PaymentService-->>DB: 차감 내역 저장
-      end
-      Note over OrderAPI: 트랜잭션 종료
-      OrderAPI-->>Client: order ID : 12345
-      Note over OrderAPI,NotificationService: 외부에 데이터 전송
-      OrderAPI->>MessageQueue: 주문내역 전송
-      MessageQueue-->>NotificationService: 주문내역
-      par Notification Channels
-          NotificationService->>NotificationService: 알림톡 전송
-      end
+  autonumber
+  actor Client
+  participant OrderAPI
+  participant StockService
+  participant UserService
+  participant PaymentService
+  participant Redisson
+  participant DB
+  participant MessageQueue
+  participant NotificationService
+  Client->>OrderAPI: POST /api/orders
+  Note over OrderAPI: 트랜잭션 시작
+  OrderAPI->>DB: 주문 정보 저장(status = '대기')
+  OrderAPI->>DB: 주문 상세정보 저장
+  Note over StockService: 트랜잭션 시작
+  loop
+    StockService->>Redisson: 상품번호 기준 락 흭득
+    StockService->>DB: 재고 조회
+    alt 재고개수 = 0
+      DB-->>StockService: 409 CONFLICT
+      StockService-->>Client: 409 CONFLICT
+    else 재고개수 > 0
+      Redisson->>DB: 재고차감
+    end
+  end
+  Note over StockService: 트랜잭션 종료
+  UserService->>PaymentService: 보유 포인트 조회
+  alt 보유포인트 < 주문금액
+    PaymentService-->>Client: 포인트부족 예외
+  else 보유포인트 >= 주문금액
+    UserService->>PaymentService: 보유 포인트 차감
+    PaymentService-->>DB: 차감 내역 저장
+  end
+  Note over OrderAPI: 트랜잭션 종료
+  OrderAPI-->>Client: order ID : 12345
+  Note over OrderAPI,NotificationService: 외부에 데이터 전송
+  OrderAPI->>MessageQueue: 주문내역 전송
+  MessageQueue-->>NotificationService: 주문내역
+  par Notification Channels
+    NotificationService->>NotificationService: 알림톡 전송
+  end
   ```
 
 </details>
@@ -309,7 +309,7 @@
       }
     ],
     "paymentAmount": 10000
-  }  
+  }
 ]
 ```
 
@@ -376,15 +376,15 @@
 </details>
 
 ## 🚀 기술 스택
- - **Backend: Spring Boot, JPA, JUnit, MySQL, Redisson(Redis)**
- - **CI/CD: Github actions, Docker**
+- **Backend: Spring Boot, JPA, JUnit, MySQL, Redisson(Redis)**
+- **CI/CD: Github actions, Docker**
 
 ## ⚙️ **Architecture**
 ![img_1.png](docs/images/architecture.png)
 
 ## ✅ 문제 해결 및 학습내용
 <details>
-  <summary>동시성 이슈</summary>
+  <summary>1️⃣ 동시성 이슈</summary>
 
 ## 재고 감소 문제에 따른 분석
 
@@ -577,13 +577,13 @@ public class OrderUseCase {
 
 ### 결과
 비관적 락, Lettuce 락, Redisson 락을 사용하여 상품 재고에 대한 정합성을 확보했습니다.
-또한, 방식에 따라 성능지표를 확인하며 락 특징들에 대한 이해를 쌓았습니다. 
+또한, 방식에 따라 성능지표를 확인하며 락 특징들에 대한 이해를 쌓았습니다.
 
 ### 💹 (추가) 분산 락 특징 및 유의할 점
 ## 🌟 Best practice
 - 분산 락 구현시 트랜잭션은 데이터의 무결성을 보장하기 위해 `"락 흭득을 우선"`
-![img_4.png](docs/images/con_img_4.png)
-![img_5.png](docs/images/con_img_5.png)<br/>
+  ![img_4.png](docs/images/con_img_4.png)
+  ![img_5.png](docs/images/con_img_5.png)<br/>
 - `@Transactional`이 존재하는 decreaseStock 메서드 경우 메서드 시작 전에 프록시 객체가 생성되어 tx.begin()을 시작해버리기 때문에 외부에서 락을 잡아놓고 진행되어야합니다.
 - 해당 사항을 고려하여 OrderUsecase에서 먼저 상품 번호에 대한 Lock 흭득 후 decreasStock 메서드가 수행되도록 진행 했습니다.
 - 이를 위반한 경우 아래 예제에 내용을 포함했습니다.
@@ -598,18 +598,17 @@ public class OrderUseCase {
 ### <b>2. 트랜잭션 커밋 전 락이 해제되는 경우</b>
 ![img_6.png](docs/images/con_img_6.png)
 - 실무에서 가장 많이 발생하는 실수라고 들었던 것 같습니다.
-- 핵심 포인트는 `수정 사항을 커밋 이후 락 해제!` 
+- 핵심 포인트는 `수정 사항을 커밋 이후 락 해제!`
 </details>
 
 <details>
-  <summary>멱등성</summary>
+  <summary>2️⃣ 멱등성</summary>
   <div> > 첫 번째 수행을 한 뒤 여러 차례 적용해도 결과를 변경시키지 않는 작업 또는 기능의 속성</div>
 
 포인트 충전 시 더블클릭/네트워크 오류로 인한 중복된 리소스가 생성되지 않도록 했습니다.(공짜돈 방지)
 
-## 1. 구현 
-
-### 1-1. 인터셉터
+# 1. 구현
+## 1-1. 인터셉터
 ```text
 기능 개발에 앞서 어느 계층에 적용하는 것이 적합한 것인가에 대해 고민했습니다.
 
@@ -617,13 +616,30 @@ public class OrderUseCase {
 2. 컨트롤러
 3. 인터셉터
 ```
-인터셉터를 선정했습니다.
-- `동일한 요청에 대해 컨트롤러와 도메인 로직이 실행 되는 것을 방지`하고자였습니다.
-- 또한, `예외처리 때문에 스프링 컨테이너로 관리되는 인터셉터에서 진행`했습니다. 
+인터셉터로 선정했습니다.
+- 동일한 요청에 대해 `컨트롤러와 도메인 로직이 실행 되는 것이 적합하지 않다고 판단`하였습니다.
+- 또한, `예외처리의 이유로 스프링 컨테이너로 관리되는 인터셉터에서 진행`했습니다.
 
-### 1-2. 구현 코드
-1. 반복요청 통과
-2. 인터셉터부터 
+### 1-2. 로직 과정
+![img.png](docs/images/idem.png)
+[코드 자세히 보기](https://github.com/JGwanghou/ho-commerce/blob/b9bb3043a75060c732ecabd0904cac72920edb79/src/main/java/com/gwangho/commerce/app/api/interceptor/IdempotencyInterceptor.java)
+1. 최초 요청을 합니다.</br>
+   1.1. DB에 결과를 반영합니다.</br>
+   1.2. 인터셉터에서 Response를 레디스에 저장합니다.</br>
+   1.3. 필터에서 복사 된 Response를 클라이언트에게 반환합니다.</br>
+
+2. 순간 동일 요청 시 처리중(409)에러 반환
+3. 동일 요청 시 도메인 로직을 거치지 않고 레디스 캐싱 값으로 응답
+
+기존에는 요청(preHandle)시 멱등성 키를 redis-key로 설정 후 컨트롤러를 진행하도록 했습니다.
+하지만, 잘못된 인자값 또는 처리 중 오류가 발생한 경우에도 레디스에 키가 저장됐습니다.</br>
+
+해당 문제를 발견하고 성공적으로 응답이 반환 된 경우만 레디스에 저장하기로 결정했습니다.
 </details>
 
+<details>
+<summary>3️⃣ 테스트 격리</summary>
+<div>
 
+</div>
+</details>
