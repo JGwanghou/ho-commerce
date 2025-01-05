@@ -1,0 +1,12 @@
+
+### GET 포인트 조회
+GET {{root-path}}/api/v1/users/1
+
+### POST 포인트 충전
+POST {{root-path}}/api/v1/users/1/charge
+Content-Type: application/json
+Idempotency-Key: 221234155123454
+
+{
+  "chargeAmount": "100000.0"
+}
