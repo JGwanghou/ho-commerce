@@ -640,6 +640,3 @@ public class OrderUseCase {
 <details>
 <summary>3️⃣ 테스트 격리</summary>
 <div>
-
-</div>
-</details>
